@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+import "dimitStoreConf.proto";
+option java_package = "dimit.store";
+option java_multiple_files = true;
+//option java_outer_classname = "DimitStore";
+
+//
+message Dimit {
+    uint32 v = 1;
+    string id = 2; // instance id
+    string cid = 3; // DimitConf id
+    string name = 4; // application name
+    string host = 5; // host name
+    string ipv4 = 6;
+    string ipv6 = 7;
+    string pid = 8; //progress id
+    //int32 port = 9; // progress port
+    DimitStatus status = 12;
+    DimitRole role = 13;
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+
+    //
+    enum DimitStatus {
+        OFFLINE = 0;
+        ONLINE = 1;
+    }
+
+    enum DimitRole {
+        MASTER = 0;
+        PARTNER = 1;
+    }
+
+}
+
+//
+message ChannelGroup { // ChannelGroupConf's instance
+    uint32 v = 1;
+    string id = 2; // instance id
+    string cid = 3; // ChannelGroupConf's id
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}
+
+enum ChannelType {
+    SEND = 0; // client sending request
+    RECV = 1; // server received callback
+}
+
+//
+message Channel { // ChannelConf's instance
+    uint32 v = 1;
+    string id = 2; // instance id
+    string cid = 3; // ChannelConf's id
+    ChannelType type = 4;
+    float tps = 5; // max-tps of the channel instance. Default value =
+    // float ratio = 8; //TODO
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}
+
+message ChannelSendStat {
+    uint32 v = 1;
+    string id = 2;
+    string channelId = 3;
+    uint64 succCount = 4;
+    uint64 succTime = 5; // millisecond
+    uint64 failCount = 6;
+    uint64 failTime = 7;
+    double tps = 8;
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}
+
+message ChannelRecvStat {
+    uint32 v = 1;
+    string id = 2;
+    string channelId = 3; // Channel's id
+    uint64 succCount = 4;
+    uint64 failCount = 5;
+    double tps = 8;
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}
+
+message ChannelTotalStat {
+    uint32 v = 1;
+    string cid = 2; // ChannelConf's id
+    uint64 sendSuccCount = 3;
+    uint64 sendFailCount = 4;
+    uint64 sendSuccTime = 5; //  millisecond
+    uint64 sendFailTime = 6;
+    uint64 recvSuccCount = 7;
+    uint64 recvFailCount = 8;
+    uint64 sendRecvTime = 12; //total(ms = back - send)
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}

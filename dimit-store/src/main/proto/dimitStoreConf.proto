@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option java_package = "dimit.store.conf";
+option java_multiple_files = true;
+
+//range:[0,255]
+enum MagicFlag {
+
+// conf
+    DIMIT_CONF = 0;
+    CHANNEL_GROUP_CONF = 1;
+    CHANNEL_CONF = 2;
+
+    // store
+    DIMIT = 3;
+    CHANNEL_GROUP = 4;
+    CHANNEL = 5;
+    CHANNEL_SEND_STAT = 6;
+    CHANNEL_RECV_STAT = 7;
+    CHANNEL_TOTAL_STAT = 8;
+}
+
+//
+message DimitConf {
+    uint32 v = 1;
+    string id = 2; // dimit id
+    string name = 3;
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}
+
+//
+message ChannelGroupConf {
+    uint32 v = 1;
+    string id = 2; // group id
+    string name = 3; // group name, unique
+    string did = 4; // dimit id
+    //TODO LoadPolicy
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}
+
+//
+message ChannelConf {
+    uint32 v = 1;
+    string id = 2; // channel id
+    string name = 3; // name, unique
+    ChannelStatus status = 4;
+    string gid = 5; // group id
+    float tps = 6; // max-tps of the channel
+    int32 priority = 7; // channel priority [1-9]. The maximum-Priority is 9. Default is 5
+    repeated string tag = 8;
+
+    // timestamp
+    uint64 ct = 9; // create timestamp
+    uint64 mt = 10; // modify timestamp
+}
+
+enum ChannelStatus {
+    CLOSED = 0;
+    PRIMARY = 1;
+    STANDBY = 2;
+    INVALID = 3;
+}
+
+//enum LoadPolicy {
+//TODO
+//}
+
