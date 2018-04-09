@@ -12,6 +12,8 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.util.concurrent.RateLimiter;
+
 import dimit.core.Dimiter;
 import dimit.core.StoreConst;
 import dimit.store.Channel;
@@ -31,7 +33,7 @@ import dimit.store.util.IDUtil;
  * @date Apr 4, 2018 11:53:57 AM
  * @version 0.0.1
  */
-public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Callable<T> {
+public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
 
     static Logger LOG = LoggerFactory.getLogger(ChannelWrapper.class);
 
@@ -39,18 +41,24 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
     private volatile Channel store;
     private ChannelGroupWrapper group;
 
-    private ChannelCallable<T> callable;
-
     private Dimiter dimiter;
 
     private List<WatchKey> keys;
 
-    private ChannelWrapper(Dimiter dimiter, ChannelCallable<T> callable) {
-        this.dimiter = dimiter;
-        this.callable = callable;
-        this.keys = new LinkedList<>();
+    private RateLimiter limiter;
 
-        if (callable != null) callable.setChannel(this);
+    private ChannelWrapper(Dimiter dimiter) {
+        this.dimiter = dimiter;
+        this.keys = new LinkedList<>();
+    }
+
+    public synchronized void updateLimiter() {
+        LOG.info("{} {} updateLimiter:{}", conf.getId(), id(), tps());
+        if (limiter == null) {
+            limiter = RateLimiter.create(tps());
+        } else {
+            limiter.setRate(tps());
+        }
     }
 
     @Override
@@ -86,22 +94,21 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
     }
 
     @Override
-    public T call() throws Exception {
-        return callable.call();
-    }
-
-    @Override
     public String id() {
         return store.getId();
     }
 
-    public static <T> ChannelWrapper<T> init(Dimiter dimiter, String gid, String cid, ChannelType type, ChannelCallable<T> callable)
-            throws IOException {
+    public <V> V call(Callable<V> c) throws Exception {
+        if (!limiter.tryAcquire()) { throw new RateLimiterException("out of tps:" + limiter.getRate()); }
+        return c.call();
+    }
+
+    public static ChannelWrapper init(Dimiter dimiter, String gid, String cid, ChannelType type) throws IOException {
         DimitStoreSystem dss = dimiter.getStoreSystem();
         DimitPath groupPath = dss.getPath(StoreConst.PATH_CONF, dimiter.getDimit().conf().getId(), gid);
 
         // create ChannelConf
-        ChannelWrapper<T> channel = new ChannelWrapper<T>(dimiter, callable);
+        ChannelWrapper channel = new ChannelWrapper(dimiter);
         channel.conf = groupPath.newPath(cid).<ChannelConf> toStore(ChannelConf.class);
 
         if (channel.conf == null) return null;
@@ -133,7 +140,7 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
             channel.addWatchKey(key);
         }
 
-        callable.updateLimiter();
+        channel.updateLimiter();
         return channel;
     }
 
@@ -199,7 +206,7 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
         LOG.info("update EPHEMERAL channel {}", store);
 
         // LOG.info("update tps-{}", tps());
-        callable.updateLimiter();
+        updateLimiter();
     }
 
     public float tps() {
@@ -225,7 +232,7 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
-        if (obj instanceof ChannelWrapper) { return ((ChannelWrapper<?>) obj).id() == id(); }
+        if (obj instanceof ChannelWrapper) { return ((ChannelWrapper) obj).id() == id(); }
         return false;
     }
 

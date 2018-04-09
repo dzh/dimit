@@ -9,9 +9,10 @@ import com.google.common.util.concurrent.RateLimiter;
  * @date Apr 7, 2018 3:30:50 PM
  * @version 0.0.1
  */
+@Deprecated
 public abstract class ChannelCallable<V> implements Callable<V> {
 
-    private ChannelWrapper<V> channel;
+    private ChannelWrapper channel;
 
     private RateLimiter limiter;
 
@@ -23,11 +24,11 @@ public abstract class ChannelCallable<V> implements Callable<V> {
         }
     }
 
-    public ChannelWrapper<V> getChannel() {
+    public ChannelWrapper getChannel() {
         return channel;
     }
 
-    public void setChannel(ChannelWrapper<V> channel) {
+    public void setChannel(ChannelWrapper channel) {
         this.channel = channel;
     }
 

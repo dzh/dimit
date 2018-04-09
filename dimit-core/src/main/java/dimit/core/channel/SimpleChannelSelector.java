@@ -36,13 +36,13 @@ public class SimpleChannelSelector extends ChannelSelector {
     }
 
     @Override
-    List<ChannelWrapper<?>> select(ChannelType type, String... tags) {
+    List<ChannelWrapper> select(ChannelType type, String... tags) {
         // PRIMARY
-        TreeSet<ChannelWrapper<?>> primary = new TreeSet<>(new PriorityComparator());
+        TreeSet<ChannelWrapper> primary = new TreeSet<>(new PriorityComparator());
         // STANDBY
-        TreeSet<ChannelWrapper<?>> standby = new TreeSet<>(new PriorityComparator());
+        TreeSet<ChannelWrapper> standby = new TreeSet<>(new PriorityComparator());
 
-        for (ChannelWrapper<?> ch : group().channel()) {
+        for (ChannelWrapper ch : group().channel()) {
             if (ch.store().getType().getNumber() != type.getNumber())  // only SEND
                 continue;
             if (!ch.isValid()) continue;
@@ -57,8 +57,8 @@ public class SimpleChannelSelector extends ChannelSelector {
             }
         }
 
-        List<ChannelWrapper<?>> selected = new ArrayList<>(primary.size() + standby.size());
-        Iterator<ChannelWrapper<?>> iter = primary.descendingIterator();
+        List<ChannelWrapper> selected = new ArrayList<>(primary.size() + standby.size());
+        Iterator<ChannelWrapper> iter = primary.descendingIterator();
         while (iter.hasNext()) {
             selected.add(iter.next());
         }
@@ -71,10 +71,10 @@ public class SimpleChannelSelector extends ChannelSelector {
         return selected;
     }
 
-    class PriorityComparator implements Comparator<ChannelWrapper<?>> {
+    class PriorityComparator implements Comparator<ChannelWrapper> {
 
         @Override
-        public int compare(ChannelWrapper<?> o1, ChannelWrapper<?> o2) {
+        public int compare(ChannelWrapper o1, ChannelWrapper o2) {
             int p = o1.priority() - o2.priority();
             if (p == 0) {
                 p = (int) (o1.tps() - o2.tps());

@@ -11,8 +11,8 @@ import dimit.store.ChannelType;
 /**
  * <pre>
  * e.g. how to use {@link ChannelSelector}
- * List<ChannelWrapper<?>> channels = selector.select(...)
- * for(ChannelWrapper<?> channel : channels) {
+ * List<ChannelWrapper> channels = selector.select(...)
+ * for(ChannelWrapper channel : channels) {
  *     try{
  *         V result = channel.call();
  *         //TODO parse result
@@ -41,11 +41,11 @@ public abstract class ChannelSelector implements Closeable {
         this.group = group;
     }
 
-    public List<ChannelWrapper<?>> select(String... tags) {
+    public List<ChannelWrapper> select(String... tags) {
         return select(ChannelType.SEND, tags);
     }
 
-    abstract List<ChannelWrapper<?>> select(ChannelType type, String... tags);
+    abstract List<ChannelWrapper> select(ChannelType type, String... tags);
 
     public ChannelGroupWrapper group() {
         return this.group;

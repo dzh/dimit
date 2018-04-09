@@ -28,7 +28,7 @@ import dimit.store.util.IDUtil;
  */
 public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGroupConf> {
 
-    private List<ChannelWrapper<?>> channel;
+    private List<ChannelWrapper> channel;
     private ChannelGroupConf conf;
     private ChannelGroup store;
 
@@ -37,7 +37,7 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
 
     private ChannelGroupWrapper(Dimiter dimiter) {
         this.dimiter = dimiter;
-        channel = Collections.synchronizedList(new LinkedList<ChannelWrapper<?>>());
+        channel = Collections.synchronizedList(new LinkedList<ChannelWrapper>());
         selector = new SimpleChannelSelector(this);
     }
 
@@ -59,7 +59,7 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
         return group;
     }
 
-    public List<ChannelWrapper<?>> select(String... tags) {
+    public List<ChannelWrapper> select(String... tags) {
         return selector.select(tags);
     }
 
@@ -72,26 +72,26 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
      * @return
      * @throws IOException
      */
-    public <T> ChannelWrapper<T> newChannel(String cid, ChannelType type, ChannelCallable<T> callable) throws IOException {
-        ChannelWrapper<T> channel = ChannelWrapper.<T> init(dimiter, conf().getId(), cid, type, callable);
+    public ChannelWrapper newChannel(String cid, ChannelType type) throws IOException {
+        ChannelWrapper channel = ChannelWrapper.init(dimiter, conf().getId(), cid, type);
         if (channel == null) throw new IOException("Couldn't newChannel:" + cid);
         channel().add(channel);
         return channel;
     }
 
-    public List<ChannelWrapper<?>> channel() {
+    public List<ChannelWrapper> channel() {
         return channel;
     }
 
     @Override
     public void close() throws IOException {
-        for (ChannelWrapper<?> ch : channel) {
+        for (ChannelWrapper ch : channel) {
             ch.close();
         }
     }
 
     public boolean contain(String id) {
-        for (ChannelWrapper<?> ch : channel) {
+        for (ChannelWrapper ch : channel) {
             if (ch.id().equals(id)) return true;
         }
         return false;
