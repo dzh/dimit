@@ -33,7 +33,12 @@ public class TestZkStoreSystem {
     @Before
     public void testZkStoreSystem() throws Exception {
         dss = (ZkStoreSystem) DimitStores.newStoreSystem(URI.create("dimit-zk://yp/dimit?host=127.0.0.1:2181&sleep=1000&retry=3"), null);
-        LOG.info("{}", dss.toString());
+        LOG.info("{} {}", dss.toString(), dss.getRoot().toUri());
+
+        dss.close();
+
+        dss = (ZkStoreSystem) DimitStores.newStoreSystem(URI.create("dimit-zk://yp/dimit?host=127.0.0.1:2181&sleep=1000&retry=3"), null);
+        LOG.info("{} {}", dss.toString(), dss.getRoot().toUri());
     }
 
     @Test

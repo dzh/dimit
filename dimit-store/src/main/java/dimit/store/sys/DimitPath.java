@@ -162,7 +162,7 @@ public class DimitPath implements Watchable {
     }
 
     public URI toUri() {
-        return URI.create(dss.provider().getScheme() + "://" + dss.getDomain() + toAbsolutePath());
+        return URI.create(dss.provider().getScheme() + "://" + dss.getDomain() + getRoot().getParent());
     }
 
     public <T> T toStore(Class<T> clazz) throws IOException {

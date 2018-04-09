@@ -165,7 +165,7 @@ public abstract class DimitStoreSystem implements Closeable {
 
     @Override
     public String toString() {
-        return provider().getScheme() + "://" + getDomain() + getRoot();
+        return provider().getScheme() + "://" + getDomain() + getRoot().getParent();
     }
 
     /**
