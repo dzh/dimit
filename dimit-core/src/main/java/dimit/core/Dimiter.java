@@ -8,6 +8,7 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchService;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -23,6 +24,11 @@ import dimit.store.sys.event.StoreWatchKey;
  * 
  * 流控器Dimiter实现一个DimitConf实例
  * 
+ * <pre>
+ * TODO
+ * master dimit clean store/ conf/
+ * </pre>
+ * 
  * @author dzh
  * @date Apr 4, 2018 11:37:38 AM
  * @version 0.0.1
@@ -36,6 +42,8 @@ public class Dimiter implements Closeable {
     private Thread watchThread;
 
     private DimitWrapper dimit;
+
+    private CountDownLatch watchLatch = new CountDownLatch(1);
 
     private Dimiter(DimitStoreSystem dss) throws IOException {
         this.storeSystem = dss;
@@ -76,12 +84,13 @@ public class Dimiter implements Closeable {
                             LOG.warn(e.getMessage(), e);
                             break;
                         } catch (InterruptedException e) {
-                            LOG.warn(e.getMessage(), e);
+                            // LOG.warn(e.getMessage(), e);
                             break;
                         } catch (Exception e) {
                             LOG.error(e.getMessage(), e);
                         }
                     }
+                    watchLatch.countDown();
                     LOG.info("{} closed", name);
                 }
             }, name);
@@ -129,12 +138,20 @@ public class Dimiter implements Closeable {
     }
 
     @Override
+    public String toString() {
+        return dimit.id() + "_" + dimit.name() + "_" + storeSystem;
+    }
+
+    @Override
     public void close() throws IOException {
         if (dimit != null) dimit.close();
 
         if (watch != null) {
             watch.close();
             watchThread.interrupt();
+            try {
+                watchLatch.await(10, TimeUnit.MICROSECONDS);
+            } catch (InterruptedException e) {}
         }
 
         if (storeSystem != null) storeSystem.close();

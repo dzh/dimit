@@ -53,7 +53,7 @@ public class DimitWrapper implements StoreWrapper<Dimit, DimitConf> {
         DimitPath pathConf = dss.getPath(StoreConst.PATH_CONF);
         DimitWrapper dimit = new DimitWrapper(dimiter);
 
-        dimit.conf = pathConf.newPath(cid).<DimitConf> toStore();
+        dimit.conf = pathConf.newPath(cid).<DimitConf> toStore(DimitConf.class);
         // List<DimitPath> children = conf.children();
         // for (DimitPath child : children) {
         // DimitConf dimitConf = child.<DimitConf> toStore();
@@ -84,12 +84,14 @@ public class DimitWrapper implements StoreWrapper<Dimit, DimitConf> {
      * 
      * @param cid
      *            ChannelGroupConf's id
+     * @return
      */
-    public void newChannelGroup(String cid) throws IOException {
+    public ChannelGroupWrapper newChannelGroup(String cid) throws IOException {
         ChannelGroupWrapper group = ChannelGroupWrapper.init(this.dimiter, cid);
         if (group == null) { throw new IOException("Not found ChannelGroupConf:" + cid); }
 
         group().add(group);
+        return group;
     }
 
     /**

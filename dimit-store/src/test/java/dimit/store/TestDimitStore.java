@@ -37,7 +37,7 @@ public class TestDimitStore {
         LOG.info("v {}", id);
         LOG.info("mf {}", IDUtil.toMagicFlag(id));
 
-        DimitConf dimitConf = (DimitConf) ProtoStoreIO.read(dimit.toByteArray());
+        DimitConf dimitConf = (DimitConf) ProtoStoreIO.read(dimit.toByteArray(), DimitConf.class);
         id = dimitConf.getId();
         LOG.info("v {}", id);
         LOG.info("mf {}", IDUtil.toMagicFlag(id));

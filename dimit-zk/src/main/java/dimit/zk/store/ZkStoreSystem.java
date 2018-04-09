@@ -7,12 +7,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException.NoNodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +77,12 @@ public class ZkStoreSystem extends DimitStoreSystem {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(sleep, retry);
         zkCli = CuratorFrameworkFactory.builder().connectString(connectString).retryPolicy(retryPolicy)
                 .connectionTimeoutMs(connectionTimeoutMs).sessionTimeoutMs(sessionTimeoutMs).namespace(ns).build();
-        zkCli.start();
+        try {
+            zkCli.start();
+            zkCli.blockUntilConnected(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            LOG.error(e.getMessage(), e); // TODO
+        }
         return true;
     }
 
@@ -91,14 +98,16 @@ public class ZkStoreSystem extends DimitStoreSystem {
     @Override
     protected void dispose() throws IOException {
         zkCli.close();
+        LOG.info("zkCli closed!");
     }
 
     @Override
     public byte[] read(DimitPath path) throws IOException {
         // if (!isOpen()) throw new IllegalStateException(this.toString() + " closed!");
-
         try {
             return zkCli.getData().forPath(path.toAbsolutePath().getPath());
+        } catch (NoNodeException e) {
+            return null;
         } catch (Exception e) {
             throw new IOException(e.getMessage(), e.getCause());
         }
@@ -151,7 +160,7 @@ public class ZkStoreSystem extends DimitStoreSystem {
                 StoreWatcher watch = new PathChildrenWatcher(this, key);
                 watch.run();
                 list.add(watch);
-            } else {
+            } else { // TODO support others
                 LOG.warn("Not support {}", k);
             }
         }
@@ -162,6 +171,8 @@ public class ZkStoreSystem extends DimitStoreSystem {
     public List<String> children(DimitPath path) throws IOException {
         try {
             return zkCli.getChildren().forPath(path.toAbsolutePath().getPath());
+        } catch (NoNodeException e) {
+            return Collections.emptyList();
         } catch (Exception e) {
             throw new IOException(e.getMessage(), e.getCause());
         }

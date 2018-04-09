@@ -46,7 +46,7 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
         DimitPath dimitPath = dss.getPath(StoreConst.PATH_CONF, dimiter.getDimit().conf().getId());
 
         ChannelGroupWrapper group = new ChannelGroupWrapper(dimiter);
-        group.conf = dimitPath.newPath(cid).<ChannelGroupConf> toStore();
+        group.conf = dimitPath.newPath(cid).<ChannelGroupConf> toStore(ChannelGroupConf.class);
 
         if (group.conf == null) return null;
 
@@ -59,18 +59,24 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
         return group;
     }
 
+    public List<ChannelWrapper<?>> select(String... tags) {
+        return selector.select(tags);
+    }
+
     /**
      * 
      * @param gid
      *            ChannelGroupConf's id
      * @param cid
      *            ChannelConf's id
+     * @return
      * @throws IOException
      */
-    public <T> void newChannel(String cid, ChannelType type, ChannelCallable<T> callable) throws IOException {
-        ChannelWrapper<T> channel = ChannelWrapper.<T> init(dimiter, this.conf().getId(), cid, type, callable);
+    public <T> ChannelWrapper<T> newChannel(String cid, ChannelType type, ChannelCallable<T> callable) throws IOException {
+        ChannelWrapper<T> channel = ChannelWrapper.<T> init(dimiter, conf().getId(), cid, type, callable);
         if (channel == null) throw new IOException("Couldn't newChannel:" + cid);
         channel().add(channel);
+        return channel;
     }
 
     public List<ChannelWrapper<?>> channel() {

@@ -165,8 +165,8 @@ public class DimitPath implements Watchable {
         return URI.create(dss.provider().getScheme() + "://" + dss.getDomain() + toAbsolutePath());
     }
 
-    public <T> T toStore() throws IOException {
-        return dss.<T> io().read(this);
+    public <T> T toStore(Class<T> clazz) throws IOException {
+        return dss.<T> io().read(this, clazz); // TODO
     }
 
     public boolean startsWith(DimitPath other) {
@@ -194,10 +194,6 @@ public class DimitPath implements Watchable {
     @Override
     public WatchKey register(WatchService watcher, Kind<?>... events) throws IOException {
         return register(watcher, events);
-    }
-
-    public <T> T getStore() throws IOException {
-        return this.dss.<T> io().read(this);
     }
 
     @Override

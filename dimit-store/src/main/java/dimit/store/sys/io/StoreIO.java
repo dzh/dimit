@@ -13,7 +13,7 @@ import dimit.store.sys.StoreAttribute;
  */
 public interface StoreIO<T> extends Closeable {
 
-    T read(DimitPath path) throws IOException;
+    T read(DimitPath path, Class<T> clazz) throws IOException;
 
     /**
      * 

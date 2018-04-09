@@ -75,7 +75,11 @@ public class SimpleChannelSelector extends ChannelSelector {
 
         @Override
         public int compare(ChannelWrapper<?> o1, ChannelWrapper<?> o2) {
-            return o1.priority() - o2.priority();
+            int p = o1.priority() - o2.priority();
+            if (p == 0) {
+                p = (int) (o1.tps() - o2.tps());
+            }
+            return p == 0 ? o1.id().compareTo(o2.id()) : p; // TODO
         }
 
     }

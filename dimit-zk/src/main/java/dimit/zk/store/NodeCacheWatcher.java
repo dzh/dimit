@@ -42,10 +42,12 @@ public class NodeCacheWatcher extends StoreWatcher {
             cache.getListenable().addListener(new NodeCacheListener() {
                 @Override
                 public void nodeChanged() throws Exception {
-                    LOG.info("nodeChanged {}", cache.getCurrentData());
+                    LOG.info("nodeChanged {}", cache.getCurrentData()); // TODO print detail
 
                     StoreWatchEvent event = new StoreWatchEvent(StoreEventKind.UPDATE, key.getPath(), 1);
-                    key.putEvent(event);
+                    if (!key.putEvent(event)) {
+                        LOG.info("discard {}", event);
+                    }
                 }
             });
         } catch (Exception e) {
@@ -56,7 +58,6 @@ public class NodeCacheWatcher extends StoreWatcher {
     @Override
     public void close() throws IOException {
         super.close();
-
         if (cache != null) cache.close();
     }
 

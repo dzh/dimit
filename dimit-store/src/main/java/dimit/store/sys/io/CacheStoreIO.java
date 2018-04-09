@@ -42,14 +42,14 @@ public class CacheStoreIO extends ProtoStoreIO {
      * @see dimit.store.sys.io.StoreIO#read(dimit.store.sys.DimitPath)
      */
     @Override
-    public Message read(final DimitPath path) throws IOException {
+    public Message read(final DimitPath path, final Class<Message> clazz) throws IOException {
         try {
             return msgCache.get(path.toAbsolutePath().getPath(), new Callable<Message>() {
                 @Override
                 public Message call() throws Exception {
                     byte[] data = dss.read(path.toAbsolutePath());
                     if (data == null || data.length == 0) throw new IOException("data is null. path:" + path.toString());
-                    return ProtoStoreIO.read(data);
+                    return ProtoStoreIO.<Message> read(data, clazz);
                 }
             });
         } catch (Exception e) {
@@ -74,6 +74,8 @@ public class CacheStoreIO extends ProtoStoreIO {
         // } catch (IOException e) {
         // throw new RuntimeException(getSerializingExceptionMessage("byte array"), e);
         // }
+        msgCache.invalidate(path.toAbsolutePath().getPath());
+
         return dss.write(path, store.toByteArray(), attributes);
     }
 

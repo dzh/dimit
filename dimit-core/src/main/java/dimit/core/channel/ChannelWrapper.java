@@ -17,6 +17,7 @@ import dimit.core.StoreConst;
 import dimit.store.Channel;
 import dimit.store.ChannelType;
 import dimit.store.conf.ChannelConf;
+import dimit.store.conf.ChannelStatus;
 import dimit.store.conf.MagicFlag;
 import dimit.store.sys.Const;
 import dimit.store.sys.DimitPath;
@@ -34,8 +35,8 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
 
     static Logger LOG = LoggerFactory.getLogger(ChannelWrapper.class);
 
-    private ChannelConf conf;
-    private Channel store;
+    private volatile ChannelConf conf;
+    private volatile Channel store;
     private ChannelGroupWrapper group;
 
     private ChannelCallable<T> callable;
@@ -101,22 +102,22 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
 
         // create ChannelConf
         ChannelWrapper<T> channel = new ChannelWrapper<T>(dimiter, callable);
-        channel.conf = groupPath.newPath(cid).<ChannelConf> toStore();
+        channel.conf = groupPath.newPath(cid).<ChannelConf> toStore(ChannelConf.class);
 
         if (channel.conf == null) return null;
 
-        // create store/cid/0|1/id
-        DimitPath channelPath =
-                dss.getPath(StoreConst.PATH_STORE, channel.conf.getId(), String.valueOf(type.getNumber()), channel.store.getId());
-        List<DimitPath> children = channelPath.getParent().children();
+        // find current children from store/cid/0|1
+        DimitPath channelParentPath = dss.getPath(StoreConst.PATH_STORE, channel.conf.getId(), String.valueOf(type.getNumber()));
+        List<DimitPath> children = channelParentPath.children();
         int childrenSize = children.size() + 1;
-
         // create Channel
         long ct = System.currentTimeMillis();
         float tps = channel.conf.getTps();
         Channel store = Channel.newBuilder().setId(IDUtil.storeID(MagicFlag.CHANNEL)).setCid(cid).setCt(ct).setMt(ct)
                 .setTps(tps / childrenSize).setType(type).setV(Const.V).build();
         channel.store = store;
+        // create store/cid/0|1/id
+        DimitPath channelPath = channelParentPath.newPath(store.getId());
         channelPath = dss.<Channel> io().write(channelPath, store, StoreAttribute.EPHEMERAL);
         LOG.info("create EPHEMERAL channel {}", channelPath);
 
@@ -130,6 +131,7 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
             channel.addWatchKey(key);
         }
 
+        callable.updateLimiter();
         return channel;
     }
 
@@ -137,7 +139,7 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
         DimitStoreSystem dss = dimiter.getStoreSystem();
         DimitPath groupPath = dss.getPath(StoreConst.PATH_CONF, dimiter.getDimit().conf().getId(), gid);
 
-        return groupPath.newPath(cid).<ChannelConf> toStore();
+        return groupPath.newPath(cid).<ChannelConf> toStore(ChannelConf.class);
     }
 
     @Override
@@ -154,6 +156,7 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
             ChannelConf oldConf = this.conf;
             try {
                 this.conf = newChannelConf(dimiter, oldConf.getGid(), oldConf.getId());
+                // LOG.info("new conf {}", this.conf);
                 updateTps();
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
@@ -186,22 +189,36 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
         callable.updateLimiter();
     }
 
-    public float getTps() {
+    public float tps() {
         return this.store.getTps();
     }
 
     public boolean isValid() {
-        return priority() >= 1;
+        if (conf.getStatus().equals(ChannelStatus.CLOSED) || conf.getStatus().equals(ChannelStatus.INVALID)) return false;
+
+        return tps() >= 1 && priority() >= 1;
     }
 
     public int priority() {
-        return (int) store.getTps(); // TODO runtime calculating
+        return conf.getPriority();// TODO runtime calculation
     }
 
     public boolean cantainTags(String... tags) {
         if (tags == null) return true;
         return conf.getTagList().containsAll(Arrays.asList(tags));
 
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj instanceof ChannelWrapper) { return ((ChannelWrapper<?>) obj).id() == id(); }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return store.getId() + "_" + conf.toString();
     }
 
 }

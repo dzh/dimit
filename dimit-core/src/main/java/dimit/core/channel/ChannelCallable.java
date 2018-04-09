@@ -17,9 +17,9 @@ public abstract class ChannelCallable<V> implements Callable<V> {
 
     public void updateLimiter() {
         if (limiter == null) {
-            limiter = RateLimiter.create(channel.getTps());
+            limiter = RateLimiter.create(channel.tps());
         } else {
-            limiter.setRate(channel.getTps());
+            limiter.setRate(channel.tps());
         }
     }
 
@@ -29,7 +29,6 @@ public abstract class ChannelCallable<V> implements Callable<V> {
 
     public void setChannel(ChannelWrapper<V> channel) {
         this.channel = channel;
-        updateLimiter();
     }
 
     @Override

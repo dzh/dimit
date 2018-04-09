@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import dimit.store.sys.DimitStoreSystem;
 
 /**
+ * TODO add name
+ * 
  * @author dzh
  * @date Apr 3, 2018 6:46:24 PM
  * @version 0.0.1
@@ -62,7 +64,7 @@ public class StoreWatchService implements WatchService {
      */
     @Override
     public WatchKey poll() {
-        if (closed) throw new ClosedWatchServiceException();
+        if (closed && keys.isEmpty()) throw new ClosedWatchServiceException();
         return keys.poll();
     }
 
@@ -72,7 +74,7 @@ public class StoreWatchService implements WatchService {
      */
     @Override
     public WatchKey poll(long timeout, TimeUnit unit) throws InterruptedException {
-        if (closed) throw new ClosedWatchServiceException();
+        if (closed && keys.isEmpty()) throw new ClosedWatchServiceException();
         return keys.poll(timeout, unit);
     }
 
@@ -82,11 +84,13 @@ public class StoreWatchService implements WatchService {
      */
     @Override
     public WatchKey take() throws InterruptedException {
-        if (closed) throw new ClosedWatchServiceException();
+        if (closed && keys.isEmpty()) throw new ClosedWatchServiceException();
         return keys.take();
     }
 
     public boolean putKey(StoreWatchKey key) {
+        if (closed) return false;
+
         try {
             int i = 0;
             while (!keys.offer(key)) { // TODO
