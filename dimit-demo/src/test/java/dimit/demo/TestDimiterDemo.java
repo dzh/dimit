@@ -121,25 +121,39 @@ public class TestDimiterDemo {
     }
 
     @Test
-    @Ignore
     public void testUpdateTps() throws IOException, InterruptedException {
         List<ChannelWrapper<?>> selected = null;
         selected = demo.dimiter().getDimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
         LOG.info("select only mobile {}", selected); // 21001
-        LOG.info("tps {}", selected.get(0).tps());
+        if (!selected.isEmpty()) {
+            LOG.info("tps {}", selected.get(0).tps()); // 2.0
+        }
 
         // tps/2
         DimitPath path21001 = demo.dimiter().getStoreSystem().getPath("conf", "voice", "vcode", "21001");
         ChannelConf conf21001 = path21001.toStore(ChannelConf.class);
         float oldTps = conf21001.getTps();
-        conf21001 = conf21001.toBuilder().setMt(System.currentTimeMillis()).setTps(oldTps / 2).build();
-        demo.dimiter().getStoreSystem().io().write(path21001, conf21001);
-        LOG.info("tps half {}", path21001.toStore(ChannelConf.class));
+        conf21001 = conf21001.toBuilder().setMt(System.currentTimeMillis()).setTps(conf21001.getTps() / 2).build();
+        demo.dimiter().getStoreSystem().io().write(path21001, conf21001); // 1.0
         Thread.sleep(1000L);
 
         selected = demo.dimiter().getDimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
         LOG.info("select only mobile {}", selected); // 21001
-        LOG.info("tps {}", selected.get(0).tps());
+        if (!selected.isEmpty()) {
+            LOG.info("tps {} {}", selected.get(0).tps(), selected.get(0).isValid()); // 1.0
+        }
+
+        path21001 = demo.dimiter().getStoreSystem().getPath("conf", "voice", "vcode", "21001");
+        conf21001 = path21001.toStore(ChannelConf.class);
+        conf21001 = conf21001.toBuilder().setMt(System.currentTimeMillis()).setTps(conf21001.getTps() / 2).build();
+        demo.dimiter().getStoreSystem().io().write(path21001, conf21001); // 0.5
+        Thread.sleep(1000L);
+
+        selected = demo.dimiter().getDimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+        LOG.info("select only mobile {}", selected); //
+        if (!selected.isEmpty()) {
+            LOG.info("tps {} {}", selected.get(0).tps(), selected.get(0).isValid());
+        }
 
         // restore
         path21001 = demo.dimiter().getStoreSystem().getPath("conf", "voice", "vcode", "21001");
@@ -152,8 +166,9 @@ public class TestDimiterDemo {
     @AfterClass
     public static void close() {
         try {
+            Thread.sleep(2000L);
             demo.close();
-        } catch (IOException e) {}
+        } catch (Exception e) {}
     }
 
 }

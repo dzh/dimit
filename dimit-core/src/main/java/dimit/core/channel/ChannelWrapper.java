@@ -194,8 +194,9 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
         List<DimitPath> children = channelPath.getParent().children();
         float maxTps = this.conf.getTps();
         this.store = this.store.toBuilder().setTps(children.isEmpty() ? maxTps : maxTps / children.size()).build();
-        // TODO write store
+        // write store
         dss.<Channel> io().write(channelPath, store, StoreAttribute.EPHEMERAL);
+        LOG.info("update EPHEMERAL channel {}", store);
 
         // LOG.info("update tps-{}", tps());
         callable.updateLimiter();
