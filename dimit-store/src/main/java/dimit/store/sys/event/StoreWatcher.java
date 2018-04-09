@@ -2,10 +2,10 @@ package dimit.store.sys.event;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.nio.file.WatchEvent.Kind;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
 
 import dimit.store.sys.DimitStoreSystem;
 
@@ -16,7 +16,7 @@ import dimit.store.sys.DimitStoreSystem;
  */
 public abstract class StoreWatcher implements Closeable, Runnable {
 
-    private Set<StoreEventKind> kinds;
+    private Collection<Kind<?>> kinds;
 
     private StoreWatchKey key;
 
@@ -25,7 +25,8 @@ public abstract class StoreWatcher implements Closeable, Runnable {
     public StoreWatcher(DimitStoreSystem dss, StoreWatchKey key) {
         this.key = key;
         this.dss = dss;
-        kinds = Collections.<StoreEventKind> synchronizedSet(new HashSet<StoreEventKind>());
+        kinds = Collections.<Kind<?>> synchronizedList(new LinkedList<Kind<?>>());
+        // kinds = Collections.<Kind<?>> synchronizedList(Arrays.asList(key.getKinds()));
     }
 
     public DimitStoreSystem getStoreSystem() {
@@ -36,16 +37,18 @@ public abstract class StoreWatcher implements Closeable, Runnable {
         return key;
     }
 
-    public Collection<StoreEventKind> kind() {
+    public Collection<Kind<?>> kind() {
         return kinds;
     }
 
-    public boolean contain(StoreEventKind kind) {
+    public boolean contain(Kind<?> kind) {
         return kinds.contains(kind);
     }
 
-    public boolean add(StoreEventKind kind) {
-        return kinds.add(kind);
+    public boolean add(Kind<?>... kind) {
+        for (Kind<?> k : kind)
+            kinds.add(k);
+        return true;
     }
 
     /*

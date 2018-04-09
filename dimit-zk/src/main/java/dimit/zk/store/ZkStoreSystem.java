@@ -103,7 +103,7 @@ public class ZkStoreSystem extends DimitStoreSystem {
 
     @Override
     public byte[] read(DimitPath path) throws IOException {
-        // if (!isOpen()) throw new IllegalStateException(this.toString() + " closed!");
+        if (!isOpen()) throw new IOException(this.toString() + " closed!");
         try {
             return zkCli.getData().forPath(path.toAbsolutePath().getPath());
         } catch (NoNodeException e) {
@@ -115,7 +115,7 @@ public class ZkStoreSystem extends DimitStoreSystem {
 
     @Override
     public DimitPath write(DimitPath path, byte[] data, StoreAttribute<?>... attributes) throws IOException {
-        // if (!isOpen()) throw new IllegalStateException(this.toString() + " closed!");
+        if (!isOpen()) throw new IOException(this.toString() + " closed!");
 
         CreateMode mode = CreateMode.PERSISTENT;
         if (attributes != null) {
@@ -139,6 +139,9 @@ public class ZkStoreSystem extends DimitStoreSystem {
                 zkCli.setData().forPath(absulatePath, data);
                 return path.getStoreSystem().getPath(absulatePath);
             }
+        } catch (InterruptedException e) {
+            LOG.warn(e.getMessage(), e);
+            return null; // maybe closed
         } catch (Exception e) {
             throw new IOException(e.getMessage(), e.getCause());
         }
@@ -156,7 +159,7 @@ public class ZkStoreSystem extends DimitStoreSystem {
                 StoreWatcher watch = new NodeCacheWatcher(this, key);
                 watch.run();
                 list.add(watch);
-            } else if (k.equals(StoreEventKind.CHILDREN)) {
+            } else if (k.equals(StoreEventKind.CHILDREN)) { // TODO
                 StoreWatcher watch = new PathChildrenWatcher(this, key);
                 watch.run();
                 list.add(watch);
@@ -169,6 +172,7 @@ public class ZkStoreSystem extends DimitStoreSystem {
 
     @Override
     public List<String> children(DimitPath path) throws IOException {
+        if (!isOpen()) throw new IOException(this.toString() + " closed!");
         try {
             return zkCli.getChildren().forPath(path.toAbsolutePath().getPath());
         } catch (NoNodeException e) {

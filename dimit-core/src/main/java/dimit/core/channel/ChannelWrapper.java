@@ -123,7 +123,9 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
 
         if (type == ChannelType.SEND) {
             // watch store/cid/0|1/
-            WatchKey key = channelPath.getParent().register(dimiter.watch(), new Kind<?>[] { StoreEventKind.CHILDREN }, channel);
+            WatchKey key = channelPath.getParent().register(dimiter.watch(),
+                    // new Kind<?>[] { StoreEventKind.CHILD_ADD, StoreEventKind.CHILD_DELETE }, channel);
+                    new Kind<?>[] { StoreEventKind.CHILDREN }, channel);
             channel.addWatchKey(key);
 
             // watch conf/did/gid/cid
@@ -149,6 +151,11 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
 
     @Override
     public void handle(WatchKey key, WatchEvent<?> event) {
+        if (!key.isValid()) {
+            LOG.warn("{} {}", key, event);
+            return;
+        }
+
         Kind<?> k = event.kind();
         // watch conf/did/gid/cid
         if (k == StoreEventKind.UPDATE) {
@@ -157,26 +164,28 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
             try {
                 this.conf = newChannelConf(dimiter, oldConf.getGid(), oldConf.getId());
                 // LOG.info("new conf {}", this.conf);
-                updateTps();
+                updateTps(this.conf);
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
             }
         }
-        // watch store/cid/0|1/
-        else if (k == StoreEventKind.CHILD_ADD || k == StoreEventKind.CHILD_DELETE || k == StoreEventKind.CHILD_UPDATE) {
+        // watch store/cid/0|1/ TODO ignore k == StoreEventKind.CHILD_UPDATE
+        else if (k == StoreEventKind.CHILD_ADD || k == StoreEventKind.CHILD_DELETE) {
             try {
                 // DimitPath path = (DimitPath) key.watchable();
                 // List<DimitPath> children = path.children();
                 // float maxTps = this.conf.getTps();
                 // this.store.toBuilder().setTps(children.isEmpty() ? maxTps : maxTps / children.size());
-                updateTps();
+                updateTps(this.conf);
             } catch (IOException e) {
                 LOG.error(e.getMessage(), e);
             }
+        } else {
+            LOG.info("discard {} {}", key, event);
         }
     }
 
-    private void updateTps() throws IOException {
+    private void updateTps(ChannelConf conf) throws IOException {
         DimitStoreSystem dss = dimiter.getStoreSystem();
 
         // update tps
@@ -184,8 +193,11 @@ public class ChannelWrapper<T> implements StoreWrapper<Channel, ChannelConf>, Ca
                 dss.getPath(StoreConst.PATH_STORE, conf.getId(), String.valueOf(store.getType().getNumber()), store.getId());
         List<DimitPath> children = channelPath.getParent().children();
         float maxTps = this.conf.getTps();
-        this.store.toBuilder().setTps(children.isEmpty() ? maxTps : maxTps / children.size());
+        this.store = this.store.toBuilder().setTps(children.isEmpty() ? maxTps : maxTps / children.size()).build();
+        // TODO write store
+        dss.<Channel> io().write(channelPath, store, StoreAttribute.EPHEMERAL);
 
+        // LOG.info("update tps-{}", tps());
         callable.updateLimiter();
     }
 

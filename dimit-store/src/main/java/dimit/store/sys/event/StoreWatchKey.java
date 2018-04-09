@@ -167,7 +167,7 @@ public class StoreWatchKey implements WatchKey {
 
     @Override
     public String toString() {
-        return watchable().toString();
+        return watchable().toString() + "_" + valid.get();
     }
 
     public Object getAttachment() {

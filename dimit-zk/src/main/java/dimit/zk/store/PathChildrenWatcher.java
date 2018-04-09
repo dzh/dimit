@@ -30,7 +30,7 @@ public class PathChildrenWatcher extends StoreWatcher {
 
     public PathChildrenWatcher(DimitStoreSystem dss, StoreWatchKey key) {
         super(dss, key);
-        add(StoreEventKind.CHILDREN);
+        add(StoreEventKind.CHILDREN, StoreEventKind.CHILD_ADD, StoreEventKind.CHILD_DELETE, StoreEventKind.CHILD_UPDATE);
     }
 
     @Override
@@ -38,27 +38,31 @@ public class PathChildrenWatcher extends StoreWatcher {
         ZkStoreSystem zss = (ZkStoreSystem) getStoreSystem();
         final StoreWatchKey key = getWatchKey();
         try {
-            cache = new PathChildrenCache(zss.zkCli(), key.getPath().toAbsolutePath().getPath(), true);
+            cache = new PathChildrenCache(zss.zkCli(), key.getPath().toAbsolutePath().getPath(), false);
             cache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
             cache.getListenable().addListener(new PathChildrenCacheListener() {
                 @Override
                 public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                     ChildData child = event.getData();
                     LOG.info("childEvent {}", event);
+                    Type t = event.getType();
 
                     StoreWatchEvent e = null;
-                    Type t = event.getType();
                     if (t == Type.CHILD_ADDED) { // TODO
                         e = new StoreWatchEvent(StoreEventKind.CHILD_ADD, key.getPath().newPath(child.getPath()), 1);
                     } else if (t == Type.CHILD_REMOVED) {
                         e = new StoreWatchEvent(StoreEventKind.CHILD_DELETE, key.getPath().newPath(child.getPath()), 1);
                     } else if (t == Type.CHILD_UPDATED) {
                         e = new StoreWatchEvent(StoreEventKind.CHILD_UPDATE, key.getPath().newPath(child.getPath()), 1);
-                    } else {
-                        LOG.warn("discard {}", event);
                     }
 
-                    if (e != null) key.putEvent(e);
+                    // TODO filter event !PathChildrenWatcher.this.getWatchKey().getKinds()
+                    if (e == null) {
+                        LOG.warn("discard {}", event);
+                        return;
+                    }
+
+                    key.putEvent(e);
                 }
             });
         } catch (Exception e) {

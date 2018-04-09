@@ -87,7 +87,8 @@ public class TestDimiterDemo {
      * @throws InterruptedException
      */
     @Test
-    public void testSendChannel() throws IOException, InterruptedException {
+    @Ignore
+    public void testSelectChannel() throws IOException, InterruptedException {
         // select channel
         List<ChannelWrapper<?>> selected = null;
         // selected = demo.dimiter().getDimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
@@ -117,6 +118,35 @@ public class TestDimiterDemo {
         demo.dimiter().getStoreSystem().io().write(path21001, conf21001);
         LOG.info("valid {}", path21001.toStore(ChannelConf.class));
 
+    }
+
+    @Test
+    @Ignore
+    public void testUpdateTps() throws IOException, InterruptedException {
+        List<ChannelWrapper<?>> selected = null;
+        selected = demo.dimiter().getDimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+        LOG.info("select only mobile {}", selected); // 21001
+        LOG.info("tps {}", selected.get(0).tps());
+
+        // tps/2
+        DimitPath path21001 = demo.dimiter().getStoreSystem().getPath("conf", "voice", "vcode", "21001");
+        ChannelConf conf21001 = path21001.toStore(ChannelConf.class);
+        float oldTps = conf21001.getTps();
+        conf21001 = conf21001.toBuilder().setMt(System.currentTimeMillis()).setTps(oldTps / 2).build();
+        demo.dimiter().getStoreSystem().io().write(path21001, conf21001);
+        LOG.info("tps half {}", path21001.toStore(ChannelConf.class));
+        Thread.sleep(1000L);
+
+        selected = demo.dimiter().getDimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+        LOG.info("select only mobile {}", selected); // 21001
+        LOG.info("tps {}", selected.get(0).tps());
+
+        // restore
+        path21001 = demo.dimiter().getStoreSystem().getPath("conf", "voice", "vcode", "21001");
+        conf21001 = path21001.toStore(ChannelConf.class);
+        conf21001 = conf21001.toBuilder().setMt(System.currentTimeMillis()).setTps(oldTps).build();
+        demo.dimiter().getStoreSystem().io().write(path21001, conf21001);
+        LOG.info("restore {}", path21001.toStore(ChannelConf.class));
     }
 
     @AfterClass
