@@ -11,18 +11,22 @@ import dimit.store.ChannelType;
 /**
  * <pre>
  * e.g. how to use {@link ChannelSelector}
- * List<ChannelWrapper> channels = selector.select(...)
+ * List<ChannelWrapper> channels = selector.select(...); // tags
+ * V result = null;
  * for(ChannelWrapper channel : channels) {
  *     try{
- *         V result = channel.call();
- *         //TODO parse result
+ *         result = channel.call(new Callable<V>{
+ *             // TODO request
+ *             
+ *         });
+ *         //TODO parse result 
  *         
  *         break;
  *     }catch(RateLimiterException e){
  *         LOG.info(e.getMessage(), e);
  *         continue;  // next channel
  *     }catch(Exception e){
- *         LOG.error(e.getMessage(), e)
+ *         LOG.error(e.getMessage(), e);
  *         continue; // or break
  *     }
  * }
