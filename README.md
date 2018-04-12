@@ -59,10 +59,10 @@ for(ChannelWrapper channel : selected) {
         break;
     }catch(RateLimiterException e){
         LOG.info(e.getMessage(), e);
-        continue;  // next channel
-    }catch(Exception e){
+    }catch(InvalidChannelException e){
         LOG.error(e.getMessage(), e);
-        continue; // or break
+    }catch(Exception e){  // or break
+        LOG.error(e.getMessage(), e);
     }
 }
 

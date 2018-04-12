@@ -27,8 +27,8 @@ import dimit.store.sys.event.StoreWatchKey;
  * 流控器Dimiter实现一个DimitConf实例
  * 
  * <pre>
- * TODO
- * master dimit clean store/ conf/
+ * TODO master dimit clean store/ conf/
+ * 
  * </pre>
  * 
  * @author dzh

@@ -26,8 +26,8 @@ import dimit.store.util.IDUtil;
 
 /**
  * <pre>
- * TODO 选举 {@link DimitRole#MASTER MASTER}
- * TODO 如何减少持久代的内存
+ * TODO 选举 {@link DimitRole#MASTER MASTER} http://curator.apache.org/curator-recipes/leader-election.html
+ * TODO 减少持久代的内存
  * </pre>
  * 
  * @author dzh

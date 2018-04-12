@@ -153,7 +153,7 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
                 }
                 case ChannelCallable.CODE_FATAL: {
                     invalid();
-                    break;
+                    throw new InvalidChannelException("Invalid ChannelConf:" + conf.getId() + ", code:-1");
                 }
                 }
             }
@@ -303,7 +303,8 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
     public boolean isValid() {
         if (conf.getStatus().equals(ChannelStatus.CLOSED) || conf.getStatus().equals(ChannelStatus.INVALID)) return false;
 
-        return tps() > 0 && priority() > StoreConst.MIN_PRIORITY;
+        // ChannelType
+        return store.getType() == ChannelType.SEND ? (tps() > 0 && priority() > StoreConst.MIN_PRIORITY) : true;
     }
 
     public int priority() { // TODO priority cache
