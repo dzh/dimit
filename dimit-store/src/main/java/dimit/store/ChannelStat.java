@@ -4,26 +4,28 @@
 package dimit.store;
 
 /**
- * Protobuf type {@code ChannelSendStat}
+ * Protobuf type {@code ChannelStat}
  */
-public  final class ChannelSendStat extends
+public  final class ChannelStat extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:ChannelSendStat)
-    ChannelSendStatOrBuilder {
+    // @@protoc_insertion_point(message_implements:ChannelStat)
+    ChannelStatOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ChannelSendStat.newBuilder() to construct.
-  private ChannelSendStat(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ChannelStat.newBuilder() to construct.
+  private ChannelStat(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ChannelSendStat() {
+  private ChannelStat() {
     v_ = 0;
     id_ = "";
-    channelId_ = "";
+    channel_ = "";
+    count_ = 0L;
+    time_ = 0L;
     succCount_ = 0L;
     succTime_ = 0L;
-    failCount_ = 0L;
-    failTime_ = 0L;
     tps_ = 0D;
+    avgTime_ = 0D;
+    succRate_ = 0D;
     ct_ = 0L;
     mt_ = 0L;
   }
@@ -33,7 +35,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private ChannelSendStat(
+  private ChannelStat(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -73,27 +75,27 @@ private static final long serialVersionUID = 0L;
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            channelId_ = s;
+            channel_ = s;
             break;
           }
           case 32: {
 
-            succCount_ = input.readUInt64();
+            count_ = input.readUInt64();
             break;
           }
           case 40: {
 
-            succTime_ = input.readUInt64();
+            time_ = input.readUInt64();
             break;
           }
           case 48: {
 
-            failCount_ = input.readUInt64();
+            succCount_ = input.readUInt64();
             break;
           }
           case 56: {
 
-            failTime_ = input.readUInt64();
+            succTime_ = input.readUInt64();
             break;
           }
           case 65: {
@@ -111,6 +113,16 @@ private static final long serialVersionUID = 0L;
             mt_ = input.readUInt64();
             break;
           }
+          case 89: {
+
+            avgTime_ = input.readDouble();
+            break;
+          }
+          case 97: {
+
+            succRate_ = input.readDouble();
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -125,19 +137,23 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return dimit.store.DimitStore.internal_static_ChannelSendStat_descriptor;
+    return dimit.store.DimitStore.internal_static_ChannelStat_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return dimit.store.DimitStore.internal_static_ChannelSendStat_fieldAccessorTable
+    return dimit.store.DimitStore.internal_static_ChannelStat_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            dimit.store.ChannelSendStat.class, dimit.store.ChannelSendStat.Builder.class);
+            dimit.store.ChannelStat.class, dimit.store.ChannelStat.Builder.class);
   }
 
   public static final int V_FIELD_NUMBER = 1;
   private int v_;
   /**
+   * <pre>
+   * basic
+   * </pre>
+   *
    * <code>uint32 v = 1;</code>
    */
   public int getV() {
@@ -147,6 +163,10 @@ private static final long serialVersionUID = 0L;
   public static final int ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object id_;
   /**
+   * <pre>
+   * id
+   * </pre>
+   *
    * <code>string id = 2;</code>
    */
   public java.lang.String getId() {
@@ -162,6 +182,10 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
+   * <pre>
+   * id
+   * </pre>
+   *
    * <code>string id = 2;</code>
    */
   public com.google.protobuf.ByteString
@@ -178,87 +202,125 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int CHANNELID_FIELD_NUMBER = 3;
-  private volatile java.lang.Object channelId_;
+  public static final int CHANNEL_FIELD_NUMBER = 3;
+  private volatile java.lang.Object channel_;
   /**
-   * <code>string channelId = 3;</code>
+   * <pre>
+   * channel's id
+   * </pre>
+   *
+   * <code>string channel = 3;</code>
    */
-  public java.lang.String getChannelId() {
-    java.lang.Object ref = channelId_;
+  public java.lang.String getChannel() {
+    java.lang.Object ref = channel_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      channelId_ = s;
+      channel_ = s;
       return s;
     }
   }
   /**
-   * <code>string channelId = 3;</code>
+   * <pre>
+   * channel's id
+   * </pre>
+   *
+   * <code>string channel = 3;</code>
    */
   public com.google.protobuf.ByteString
-      getChannelIdBytes() {
-    java.lang.Object ref = channelId_;
+      getChannelBytes() {
+    java.lang.Object ref = channel_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      channelId_ = b;
+      channel_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
   }
 
-  public static final int SUCCCOUNT_FIELD_NUMBER = 4;
+  public static final int COUNT_FIELD_NUMBER = 4;
+  private long count_;
+  /**
+   * <pre>
+   * accumulative
+   * </pre>
+   *
+   * <code>uint64 count = 4;</code>
+   */
+  public long getCount() {
+    return count_;
+  }
+
+  public static final int TIME_FIELD_NUMBER = 5;
+  private long time_;
+  /**
+   * <pre>
+   * total call millisecond
+   * </pre>
+   *
+   * <code>uint64 time = 5;</code>
+   */
+  public long getTime() {
+    return time_;
+  }
+
+  public static final int SUCCCOUNT_FIELD_NUMBER = 6;
   private long succCount_;
   /**
-   * <code>uint64 succCount = 4;</code>
+   * <code>uint64 succCount = 6;</code>
    */
   public long getSuccCount() {
     return succCount_;
   }
 
-  public static final int SUCCTIME_FIELD_NUMBER = 5;
+  public static final int SUCCTIME_FIELD_NUMBER = 7;
   private long succTime_;
   /**
-   * <pre>
-   * millisecond
-   * </pre>
-   *
-   * <code>uint64 succTime = 5;</code>
+   * <code>uint64 succTime = 7;</code>
    */
   public long getSuccTime() {
     return succTime_;
   }
 
-  public static final int FAILCOUNT_FIELD_NUMBER = 6;
-  private long failCount_;
-  /**
-   * <code>uint64 failCount = 6;</code>
-   */
-  public long getFailCount() {
-    return failCount_;
-  }
-
-  public static final int FAILTIME_FIELD_NUMBER = 7;
-  private long failTime_;
-  /**
-   * <code>uint64 failTime = 7;</code>
-   */
-  public long getFailTime() {
-    return failTime_;
-  }
-
   public static final int TPS_FIELD_NUMBER = 8;
   private double tps_;
   /**
+   * <pre>
+   * interval mean
+   * </pre>
+   *
    * <code>double tps = 8;</code>
    */
   public double getTps() {
     return tps_;
+  }
+
+  public static final int AVGTIME_FIELD_NUMBER = 11;
+  private double avgTime_;
+  /**
+   * <pre>
+   * average calling millisecond
+   * </pre>
+   *
+   * <code>double avgTime = 11;</code>
+   */
+  public double getAvgTime() {
+    return avgTime_;
+  }
+
+  public static final int SUCCRATE_FIELD_NUMBER = 12;
+  private double succRate_;
+  /**
+   * <code>double succRate = 12;</code>
+   */
+  public double getSuccRate() {
+    return succRate_;
   }
 
   public static final int CT_FIELD_NUMBER = 9;
@@ -305,20 +367,20 @@ private static final long serialVersionUID = 0L;
     if (!getIdBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, id_);
     }
-    if (!getChannelIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, channelId_);
+    if (!getChannelBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, channel_);
+    }
+    if (count_ != 0L) {
+      output.writeUInt64(4, count_);
+    }
+    if (time_ != 0L) {
+      output.writeUInt64(5, time_);
     }
     if (succCount_ != 0L) {
-      output.writeUInt64(4, succCount_);
+      output.writeUInt64(6, succCount_);
     }
     if (succTime_ != 0L) {
-      output.writeUInt64(5, succTime_);
-    }
-    if (failCount_ != 0L) {
-      output.writeUInt64(6, failCount_);
-    }
-    if (failTime_ != 0L) {
-      output.writeUInt64(7, failTime_);
+      output.writeUInt64(7, succTime_);
     }
     if (tps_ != 0D) {
       output.writeDouble(8, tps_);
@@ -328,6 +390,12 @@ private static final long serialVersionUID = 0L;
     }
     if (mt_ != 0L) {
       output.writeUInt64(10, mt_);
+    }
+    if (avgTime_ != 0D) {
+      output.writeDouble(11, avgTime_);
+    }
+    if (succRate_ != 0D) {
+      output.writeDouble(12, succRate_);
     }
     unknownFields.writeTo(output);
   }
@@ -344,24 +412,24 @@ private static final long serialVersionUID = 0L;
     if (!getIdBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, id_);
     }
-    if (!getChannelIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, channelId_);
+    if (!getChannelBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, channel_);
+    }
+    if (count_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeUInt64Size(4, count_);
+    }
+    if (time_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeUInt64Size(5, time_);
     }
     if (succCount_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(4, succCount_);
+        .computeUInt64Size(6, succCount_);
     }
     if (succTime_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(5, succTime_);
-    }
-    if (failCount_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(6, failCount_);
-    }
-    if (failTime_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(7, failTime_);
+        .computeUInt64Size(7, succTime_);
     }
     if (tps_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
@@ -375,6 +443,14 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeUInt64Size(10, mt_);
     }
+    if (avgTime_ != 0D) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeDoubleSize(11, avgTime_);
+    }
+    if (succRate_ != 0D) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeDoubleSize(12, succRate_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -385,30 +461,38 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof dimit.store.ChannelSendStat)) {
+    if (!(obj instanceof dimit.store.ChannelStat)) {
       return super.equals(obj);
     }
-    dimit.store.ChannelSendStat other = (dimit.store.ChannelSendStat) obj;
+    dimit.store.ChannelStat other = (dimit.store.ChannelStat) obj;
 
     boolean result = true;
     result = result && (getV()
         == other.getV());
     result = result && getId()
         .equals(other.getId());
-    result = result && getChannelId()
-        .equals(other.getChannelId());
+    result = result && getChannel()
+        .equals(other.getChannel());
+    result = result && (getCount()
+        == other.getCount());
+    result = result && (getTime()
+        == other.getTime());
     result = result && (getSuccCount()
         == other.getSuccCount());
     result = result && (getSuccTime()
         == other.getSuccTime());
-    result = result && (getFailCount()
-        == other.getFailCount());
-    result = result && (getFailTime()
-        == other.getFailTime());
     result = result && (
         java.lang.Double.doubleToLongBits(getTps())
         == java.lang.Double.doubleToLongBits(
             other.getTps()));
+    result = result && (
+        java.lang.Double.doubleToLongBits(getAvgTime())
+        == java.lang.Double.doubleToLongBits(
+            other.getAvgTime()));
+    result = result && (
+        java.lang.Double.doubleToLongBits(getSuccRate())
+        == java.lang.Double.doubleToLongBits(
+            other.getSuccRate()));
     result = result && (getCt()
         == other.getCt());
     result = result && (getMt()
@@ -428,23 +512,29 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getV();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId().hashCode();
-    hash = (37 * hash) + CHANNELID_FIELD_NUMBER;
-    hash = (53 * hash) + getChannelId().hashCode();
+    hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
+    hash = (53 * hash) + getChannel().hashCode();
+    hash = (37 * hash) + COUNT_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getCount());
+    hash = (37 * hash) + TIME_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getTime());
     hash = (37 * hash) + SUCCCOUNT_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getSuccCount());
     hash = (37 * hash) + SUCCTIME_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getSuccTime());
-    hash = (37 * hash) + FAILCOUNT_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getFailCount());
-    hash = (37 * hash) + FAILTIME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getFailTime());
     hash = (37 * hash) + TPS_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         java.lang.Double.doubleToLongBits(getTps()));
+    hash = (37 * hash) + AVGTIME_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        java.lang.Double.doubleToLongBits(getAvgTime()));
+    hash = (37 * hash) + SUCCRATE_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        java.lang.Double.doubleToLongBits(getSuccRate()));
     hash = (37 * hash) + CT_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getCt());
@@ -456,69 +546,69 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static dimit.store.ChannelSendStat parseFrom(byte[] data)
+  public static dimit.store.ChannelStat parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static dimit.store.ChannelSendStat parseFrom(java.io.InputStream input)
+  public static dimit.store.ChannelStat parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static dimit.store.ChannelSendStat parseDelimitedFrom(java.io.InputStream input)
+  public static dimit.store.ChannelStat parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static dimit.store.ChannelSendStat parseDelimitedFrom(
+  public static dimit.store.ChannelStat parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static dimit.store.ChannelSendStat parseFrom(
+  public static dimit.store.ChannelStat parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -530,7 +620,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(dimit.store.ChannelSendStat prototype) {
+  public static Builder newBuilder(dimit.store.ChannelStat prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -545,25 +635,25 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code ChannelSendStat}
+   * Protobuf type {@code ChannelStat}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:ChannelSendStat)
-      dimit.store.ChannelSendStatOrBuilder {
+      // @@protoc_insertion_point(builder_implements:ChannelStat)
+      dimit.store.ChannelStatOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return dimit.store.DimitStore.internal_static_ChannelSendStat_descriptor;
+      return dimit.store.DimitStore.internal_static_ChannelStat_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return dimit.store.DimitStore.internal_static_ChannelSendStat_fieldAccessorTable
+      return dimit.store.DimitStore.internal_static_ChannelStat_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              dimit.store.ChannelSendStat.class, dimit.store.ChannelSendStat.Builder.class);
+              dimit.store.ChannelStat.class, dimit.store.ChannelStat.Builder.class);
     }
 
-    // Construct using dimit.store.ChannelSendStat.newBuilder()
+    // Construct using dimit.store.ChannelStat.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -584,17 +674,21 @@ private static final long serialVersionUID = 0L;
 
       id_ = "";
 
-      channelId_ = "";
+      channel_ = "";
+
+      count_ = 0L;
+
+      time_ = 0L;
 
       succCount_ = 0L;
 
       succTime_ = 0L;
 
-      failCount_ = 0L;
-
-      failTime_ = 0L;
-
       tps_ = 0D;
+
+      avgTime_ = 0D;
+
+      succRate_ = 0D;
 
       ct_ = 0L;
 
@@ -605,31 +699,33 @@ private static final long serialVersionUID = 0L;
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return dimit.store.DimitStore.internal_static_ChannelSendStat_descriptor;
+      return dimit.store.DimitStore.internal_static_ChannelStat_descriptor;
     }
 
-    public dimit.store.ChannelSendStat getDefaultInstanceForType() {
-      return dimit.store.ChannelSendStat.getDefaultInstance();
+    public dimit.store.ChannelStat getDefaultInstanceForType() {
+      return dimit.store.ChannelStat.getDefaultInstance();
     }
 
-    public dimit.store.ChannelSendStat build() {
-      dimit.store.ChannelSendStat result = buildPartial();
+    public dimit.store.ChannelStat build() {
+      dimit.store.ChannelStat result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public dimit.store.ChannelSendStat buildPartial() {
-      dimit.store.ChannelSendStat result = new dimit.store.ChannelSendStat(this);
+    public dimit.store.ChannelStat buildPartial() {
+      dimit.store.ChannelStat result = new dimit.store.ChannelStat(this);
       result.v_ = v_;
       result.id_ = id_;
-      result.channelId_ = channelId_;
+      result.channel_ = channel_;
+      result.count_ = count_;
+      result.time_ = time_;
       result.succCount_ = succCount_;
       result.succTime_ = succTime_;
-      result.failCount_ = failCount_;
-      result.failTime_ = failTime_;
       result.tps_ = tps_;
+      result.avgTime_ = avgTime_;
+      result.succRate_ = succRate_;
       result.ct_ = ct_;
       result.mt_ = mt_;
       onBuilt();
@@ -663,16 +759,16 @@ private static final long serialVersionUID = 0L;
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof dimit.store.ChannelSendStat) {
-        return mergeFrom((dimit.store.ChannelSendStat)other);
+      if (other instanceof dimit.store.ChannelStat) {
+        return mergeFrom((dimit.store.ChannelStat)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(dimit.store.ChannelSendStat other) {
-      if (other == dimit.store.ChannelSendStat.getDefaultInstance()) return this;
+    public Builder mergeFrom(dimit.store.ChannelStat other) {
+      if (other == dimit.store.ChannelStat.getDefaultInstance()) return this;
       if (other.getV() != 0) {
         setV(other.getV());
       }
@@ -680,9 +776,15 @@ private static final long serialVersionUID = 0L;
         id_ = other.id_;
         onChanged();
       }
-      if (!other.getChannelId().isEmpty()) {
-        channelId_ = other.channelId_;
+      if (!other.getChannel().isEmpty()) {
+        channel_ = other.channel_;
         onChanged();
+      }
+      if (other.getCount() != 0L) {
+        setCount(other.getCount());
+      }
+      if (other.getTime() != 0L) {
+        setTime(other.getTime());
       }
       if (other.getSuccCount() != 0L) {
         setSuccCount(other.getSuccCount());
@@ -690,14 +792,14 @@ private static final long serialVersionUID = 0L;
       if (other.getSuccTime() != 0L) {
         setSuccTime(other.getSuccTime());
       }
-      if (other.getFailCount() != 0L) {
-        setFailCount(other.getFailCount());
-      }
-      if (other.getFailTime() != 0L) {
-        setFailTime(other.getFailTime());
-      }
       if (other.getTps() != 0D) {
         setTps(other.getTps());
+      }
+      if (other.getAvgTime() != 0D) {
+        setAvgTime(other.getAvgTime());
+      }
+      if (other.getSuccRate() != 0D) {
+        setSuccRate(other.getSuccRate());
       }
       if (other.getCt() != 0L) {
         setCt(other.getCt());
@@ -718,11 +820,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      dimit.store.ChannelSendStat parsedMessage = null;
+      dimit.store.ChannelStat parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (dimit.store.ChannelSendStat) e.getUnfinishedMessage();
+        parsedMessage = (dimit.store.ChannelStat) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -734,12 +836,20 @@ private static final long serialVersionUID = 0L;
 
     private int v_ ;
     /**
+     * <pre>
+     * basic
+     * </pre>
+     *
      * <code>uint32 v = 1;</code>
      */
     public int getV() {
       return v_;
     }
     /**
+     * <pre>
+     * basic
+     * </pre>
+     *
      * <code>uint32 v = 1;</code>
      */
     public Builder setV(int value) {
@@ -749,6 +859,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * basic
+     * </pre>
+     *
      * <code>uint32 v = 1;</code>
      */
     public Builder clearV() {
@@ -760,6 +874,10 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object id_ = "";
     /**
+     * <pre>
+     * id
+     * </pre>
+     *
      * <code>string id = 2;</code>
      */
     public java.lang.String getId() {
@@ -775,6 +893,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     * id
+     * </pre>
+     *
      * <code>string id = 2;</code>
      */
     public com.google.protobuf.ByteString
@@ -791,6 +913,10 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     * <pre>
+     * id
+     * </pre>
+     *
      * <code>string id = 2;</code>
      */
     public Builder setId(
@@ -804,6 +930,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * id
+     * </pre>
+     *
      * <code>string id = 2;</code>
      */
     public Builder clearId() {
@@ -813,6 +943,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * id
+     * </pre>
+     *
      * <code>string id = 2;</code>
      */
     public Builder setIdBytes(
@@ -827,84 +961,180 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object channelId_ = "";
+    private java.lang.Object channel_ = "";
     /**
-     * <code>string channelId = 3;</code>
+     * <pre>
+     * channel's id
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
      */
-    public java.lang.String getChannelId() {
-      java.lang.Object ref = channelId_;
+    public java.lang.String getChannel() {
+      java.lang.Object ref = channel_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        channelId_ = s;
+        channel_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string channelId = 3;</code>
+     * <pre>
+     * channel's id
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getChannelIdBytes() {
-      java.lang.Object ref = channelId_;
+        getChannelBytes() {
+      java.lang.Object ref = channel_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        channelId_ = b;
+        channel_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string channelId = 3;</code>
+     * <pre>
+     * channel's id
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
      */
-    public Builder setChannelId(
+    public Builder setChannel(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      channelId_ = value;
+      channel_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string channelId = 3;</code>
+     * <pre>
+     * channel's id
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
      */
-    public Builder clearChannelId() {
+    public Builder clearChannel() {
       
-      channelId_ = getDefaultInstance().getChannelId();
+      channel_ = getDefaultInstance().getChannel();
       onChanged();
       return this;
     }
     /**
-     * <code>string channelId = 3;</code>
+     * <pre>
+     * channel's id
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
      */
-    public Builder setChannelIdBytes(
+    public Builder setChannelBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      channelId_ = value;
+      channel_ = value;
+      onChanged();
+      return this;
+    }
+
+    private long count_ ;
+    /**
+     * <pre>
+     * accumulative
+     * </pre>
+     *
+     * <code>uint64 count = 4;</code>
+     */
+    public long getCount() {
+      return count_;
+    }
+    /**
+     * <pre>
+     * accumulative
+     * </pre>
+     *
+     * <code>uint64 count = 4;</code>
+     */
+    public Builder setCount(long value) {
+      
+      count_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * accumulative
+     * </pre>
+     *
+     * <code>uint64 count = 4;</code>
+     */
+    public Builder clearCount() {
+      
+      count_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long time_ ;
+    /**
+     * <pre>
+     * total call millisecond
+     * </pre>
+     *
+     * <code>uint64 time = 5;</code>
+     */
+    public long getTime() {
+      return time_;
+    }
+    /**
+     * <pre>
+     * total call millisecond
+     * </pre>
+     *
+     * <code>uint64 time = 5;</code>
+     */
+    public Builder setTime(long value) {
+      
+      time_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * total call millisecond
+     * </pre>
+     *
+     * <code>uint64 time = 5;</code>
+     */
+    public Builder clearTime() {
+      
+      time_ = 0L;
       onChanged();
       return this;
     }
 
     private long succCount_ ;
     /**
-     * <code>uint64 succCount = 4;</code>
+     * <code>uint64 succCount = 6;</code>
      */
     public long getSuccCount() {
       return succCount_;
     }
     /**
-     * <code>uint64 succCount = 4;</code>
+     * <code>uint64 succCount = 6;</code>
      */
     public Builder setSuccCount(long value) {
       
@@ -913,7 +1143,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>uint64 succCount = 4;</code>
+     * <code>uint64 succCount = 6;</code>
      */
     public Builder clearSuccCount() {
       
@@ -924,21 +1154,13 @@ private static final long serialVersionUID = 0L;
 
     private long succTime_ ;
     /**
-     * <pre>
-     * millisecond
-     * </pre>
-     *
-     * <code>uint64 succTime = 5;</code>
+     * <code>uint64 succTime = 7;</code>
      */
     public long getSuccTime() {
       return succTime_;
     }
     /**
-     * <pre>
-     * millisecond
-     * </pre>
-     *
-     * <code>uint64 succTime = 5;</code>
+     * <code>uint64 succTime = 7;</code>
      */
     public Builder setSuccTime(long value) {
       
@@ -947,11 +1169,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <pre>
-     * millisecond
-     * </pre>
-     *
-     * <code>uint64 succTime = 5;</code>
+     * <code>uint64 succTime = 7;</code>
      */
     public Builder clearSuccTime() {
       
@@ -960,66 +1178,22 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long failCount_ ;
-    /**
-     * <code>uint64 failCount = 6;</code>
-     */
-    public long getFailCount() {
-      return failCount_;
-    }
-    /**
-     * <code>uint64 failCount = 6;</code>
-     */
-    public Builder setFailCount(long value) {
-      
-      failCount_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>uint64 failCount = 6;</code>
-     */
-    public Builder clearFailCount() {
-      
-      failCount_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private long failTime_ ;
-    /**
-     * <code>uint64 failTime = 7;</code>
-     */
-    public long getFailTime() {
-      return failTime_;
-    }
-    /**
-     * <code>uint64 failTime = 7;</code>
-     */
-    public Builder setFailTime(long value) {
-      
-      failTime_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>uint64 failTime = 7;</code>
-     */
-    public Builder clearFailTime() {
-      
-      failTime_ = 0L;
-      onChanged();
-      return this;
-    }
-
     private double tps_ ;
     /**
+     * <pre>
+     * interval mean
+     * </pre>
+     *
      * <code>double tps = 8;</code>
      */
     public double getTps() {
       return tps_;
     }
     /**
+     * <pre>
+     * interval mean
+     * </pre>
+     *
      * <code>double tps = 8;</code>
      */
     public Builder setTps(double value) {
@@ -1029,11 +1203,79 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * interval mean
+     * </pre>
+     *
      * <code>double tps = 8;</code>
      */
     public Builder clearTps() {
       
       tps_ = 0D;
+      onChanged();
+      return this;
+    }
+
+    private double avgTime_ ;
+    /**
+     * <pre>
+     * average calling millisecond
+     * </pre>
+     *
+     * <code>double avgTime = 11;</code>
+     */
+    public double getAvgTime() {
+      return avgTime_;
+    }
+    /**
+     * <pre>
+     * average calling millisecond
+     * </pre>
+     *
+     * <code>double avgTime = 11;</code>
+     */
+    public Builder setAvgTime(double value) {
+      
+      avgTime_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * average calling millisecond
+     * </pre>
+     *
+     * <code>double avgTime = 11;</code>
+     */
+    public Builder clearAvgTime() {
+      
+      avgTime_ = 0D;
+      onChanged();
+      return this;
+    }
+
+    private double succRate_ ;
+    /**
+     * <code>double succRate = 12;</code>
+     */
+    public double getSuccRate() {
+      return succRate_;
+    }
+    /**
+     * <code>double succRate = 12;</code>
+     */
+    public Builder setSuccRate(double value) {
+      
+      succRate_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>double succRate = 12;</code>
+     */
+    public Builder clearSuccRate() {
+      
+      succRate_ = 0D;
       onChanged();
       return this;
     }
@@ -1124,39 +1366,39 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:ChannelSendStat)
+    // @@protoc_insertion_point(builder_scope:ChannelStat)
   }
 
-  // @@protoc_insertion_point(class_scope:ChannelSendStat)
-  private static final dimit.store.ChannelSendStat DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:ChannelStat)
+  private static final dimit.store.ChannelStat DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new dimit.store.ChannelSendStat();
+    DEFAULT_INSTANCE = new dimit.store.ChannelStat();
   }
 
-  public static dimit.store.ChannelSendStat getDefaultInstance() {
+  public static dimit.store.ChannelStat getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ChannelSendStat>
-      PARSER = new com.google.protobuf.AbstractParser<ChannelSendStat>() {
-    public ChannelSendStat parsePartialFrom(
+  private static final com.google.protobuf.Parser<ChannelStat>
+      PARSER = new com.google.protobuf.AbstractParser<ChannelStat>() {
+    public ChannelStat parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new ChannelSendStat(input, extensionRegistry);
+      return new ChannelStat(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<ChannelSendStat> parser() {
+  public static com.google.protobuf.Parser<ChannelStat> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ChannelSendStat> getParserForType() {
+  public com.google.protobuf.Parser<ChannelStat> getParserForType() {
     return PARSER;
   }
 
-  public dimit.store.ChannelSendStat getDefaultInstanceForType() {
+  public dimit.store.ChannelStat getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

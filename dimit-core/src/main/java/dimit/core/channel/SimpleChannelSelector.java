@@ -37,9 +37,7 @@ public class SimpleChannelSelector extends ChannelSelector {
 
     @Override
     List<ChannelWrapper> select(ChannelType type, String... tags) {
-        // PRIMARY
         TreeSet<ChannelWrapper> primary = new TreeSet<>(new PriorityComparator());
-        // STANDBY
         TreeSet<ChannelWrapper> standby = new TreeSet<>(new PriorityComparator());
 
         for (ChannelWrapper ch : group().channel()) {
@@ -75,11 +73,11 @@ public class SimpleChannelSelector extends ChannelSelector {
 
         @Override
         public int compare(ChannelWrapper o1, ChannelWrapper o2) {
-            int p = o1.priority() - o2.priority();
+            int p = o1.priority() - o2.priority(); // TODO
             if (p == 0) {
                 p = (int) (o1.tps() - o2.tps());
             }
-            return p == 0 ? o1.id().compareTo(o2.id()) : p; // TODO
+            return p == 0 ? o1.id().compareTo(o2.id()) : p;
         }
 
     }

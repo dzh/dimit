@@ -30,15 +30,10 @@ public final class DimitStore {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Channel_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ChannelSendStat_descriptor;
+    internal_static_ChannelStat_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_ChannelSendStat_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ChannelRecvStat_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_ChannelRecvStat_fieldAccessorTable;
+      internal_static_ChannelStat_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ChannelTotalStat_descriptor;
   static final 
@@ -61,26 +56,23 @@ public final class DimitStore {
       "\r \001(\0162\020.Dimit.DimitRole\022\n\n\002ct\030\t \001(\004\022\n\n\002m" +
       "t\030\n \001(\004\"&\n\013DimitStatus\022\013\n\007OFFLINE\020\000\022\n\n\006O" +
       "NLINE\020\001\"$\n\tDimitRole\022\n\n\006MASTER\020\000\022\013\n\007PART" +
-      "NER\020\001\"J\n\014ChannelGroup\022\t\n\001v\030\001 \001(\r\022\n\n\002id\030\002" +
-      " \001(\t\022\013\n\003cid\030\003 \001(\t\022\n\n\002ct\030\t \001(\004\022\n\n\002mt\030\n \001(" +
-      "\004\"n\n\007Channel\022\t\n\001v\030\001 \001(\r\022\n\n\002id\030\002 \001(\t\022\013\n\003c" +
-      "id\030\003 \001(\t\022\032\n\004type\030\004 \001(\0162\014.ChannelType\022\013\n\003" +
-      "tps\030\005 \001(\002\022\n\n\002ct\030\t \001(\004\022\n\n\002mt\030\n \001(\004\"\252\001\n\017Ch" +
-      "annelSendStat\022\t\n\001v\030\001 \001(\r\022\n\n\002id\030\002 \001(\t\022\021\n\t" +
-      "channelId\030\003 \001(\t\022\021\n\tsuccCount\030\004 \001(\004\022\020\n\010su" +
-      "ccTime\030\005 \001(\004\022\021\n\tfailCount\030\006 \001(\004\022\020\n\010failT" +
-      "ime\030\007 \001(\004\022\013\n\003tps\030\010 \001(\001\022\n\n\002ct\030\t \001(\004\022\n\n\002mt" +
-      "\030\n \001(\004\"\206\001\n\017ChannelRecvStat\022\t\n\001v\030\001 \001(\r\022\n\n" +
-      "\002id\030\002 \001(\t\022\021\n\tchannelId\030\003 \001(\t\022\021\n\tsuccCoun" +
-      "t\030\004 \001(\004\022\021\n\tfailCount\030\005 \001(\004\022\013\n\003tps\030\010 \001(\001\022" +
-      "\n\n\002ct\030\t \001(\004\022\n\n\002mt\030\n \001(\004\"\340\001\n\020ChannelTotal" +
-      "Stat\022\t\n\001v\030\001 \001(\r\022\013\n\003cid\030\002 \001(\t\022\025\n\rsendSucc" +
-      "Count\030\003 \001(\004\022\025\n\rsendFailCount\030\004 \001(\004\022\024\n\014se" +
-      "ndSuccTime\030\005 \001(\004\022\024\n\014sendFailTime\030\006 \001(\004\022\025" +
-      "\n\rrecvSuccCount\030\007 \001(\004\022\025\n\rrecvFailCount\030\010" +
-      " \001(\004\022\024\n\014sendRecvTime\030\014 \001(\004\022\n\n\002ct\030\t \001(\004\022\n" +
-      "\n\002mt\030\n \001(\004*!\n\013ChannelType\022\010\n\004SEND\020\000\022\010\n\004R" +
-      "ECV\020\001B\017\n\013dimit.storeP\001b\006proto3"
+      "NER\020\001\"Y\n\014ChannelGroup\022\t\n\001v\030\001 \001(\r\022\n\n\002id\030\002" +
+      " \001(\t\022\013\n\003cid\030\003 \001(\t\022\r\n\005dimit\030\006 \001(\t\022\n\n\002ct\030\t" +
+      " \001(\004\022\n\n\002mt\030\n \001(\004\"}\n\007Channel\022\t\n\001v\030\001 \001(\r\022\n" +
+      "\n\002id\030\002 \001(\t\022\013\n\003cid\030\003 \001(\t\022\032\n\004type\030\004 \001(\0162\014." +
+      "ChannelType\022\013\n\003tps\030\005 \001(\002\022\r\n\005dimit\030\006 \001(\t\022" +
+      "\n\n\002ct\030\t \001(\004\022\n\n\002mt\030\n \001(\004\"\277\001\n\013ChannelStat\022" +
+      "\t\n\001v\030\001 \001(\r\022\n\n\002id\030\002 \001(\t\022\017\n\007channel\030\003 \001(\t\022" +
+      "\r\n\005count\030\004 \001(\004\022\014\n\004time\030\005 \001(\004\022\021\n\tsuccCoun" +
+      "t\030\006 \001(\004\022\020\n\010succTime\030\007 \001(\004\022\013\n\003tps\030\010 \001(\001\022\017" +
+      "\n\007avgTime\030\013 \001(\001\022\020\n\010succRate\030\014 \001(\001\022\n\n\002ct\030" +
+      "\t \001(\004\022\n\n\002mt\030\n \001(\004\"\300\001\n\020ChannelTotalStat\022\t" +
+      "\n\001v\030\001 \001(\r\022\n\n\002id\030\002 \001(\t\022\013\n\003cid\030\003 \001(\t\022\r\n\005co" +
+      "unt\030\004 \001(\004\022\014\n\004time\030\005 \001(\004\022\021\n\tsuccCount\030\006 \001" +
+      "(\004\022\020\n\010succTime\030\007 \001(\004\022\013\n\003tps\030\010 \001(\001\022\017\n\007avg" +
+      "Time\030\013 \001(\001\022\020\n\010succRate\030\014 \001(\001\022\n\n\002ct\030\t \001(\004" +
+      "\022\n\n\002mt\030\n \001(\004*!\n\013ChannelType\022\010\n\004SEND\020\000\022\010\n" +
+      "\004RECV\020\001B\017\n\013dimit.storeP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -106,31 +98,25 @@ public final class DimitStore {
     internal_static_ChannelGroup_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ChannelGroup_descriptor,
-        new java.lang.String[] { "V", "Id", "Cid", "Ct", "Mt", });
+        new java.lang.String[] { "V", "Id", "Cid", "Dimit", "Ct", "Mt", });
     internal_static_Channel_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_Channel_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Channel_descriptor,
-        new java.lang.String[] { "V", "Id", "Cid", "Type", "Tps", "Ct", "Mt", });
-    internal_static_ChannelSendStat_descriptor =
+        new java.lang.String[] { "V", "Id", "Cid", "Type", "Tps", "Dimit", "Ct", "Mt", });
+    internal_static_ChannelStat_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_ChannelSendStat_fieldAccessorTable = new
+    internal_static_ChannelStat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_ChannelSendStat_descriptor,
-        new java.lang.String[] { "V", "Id", "ChannelId", "SuccCount", "SuccTime", "FailCount", "FailTime", "Tps", "Ct", "Mt", });
-    internal_static_ChannelRecvStat_descriptor =
-      getDescriptor().getMessageTypes().get(4);
-    internal_static_ChannelRecvStat_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_ChannelRecvStat_descriptor,
-        new java.lang.String[] { "V", "Id", "ChannelId", "SuccCount", "FailCount", "Tps", "Ct", "Mt", });
+        internal_static_ChannelStat_descriptor,
+        new java.lang.String[] { "V", "Id", "Channel", "Count", "Time", "SuccCount", "SuccTime", "Tps", "AvgTime", "SuccRate", "Ct", "Mt", });
     internal_static_ChannelTotalStat_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_ChannelTotalStat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ChannelTotalStat_descriptor,
-        new java.lang.String[] { "V", "Cid", "SendSuccCount", "SendFailCount", "SendSuccTime", "SendFailTime", "RecvSuccCount", "RecvFailCount", "SendRecvTime", "Ct", "Mt", });
+        new java.lang.String[] { "V", "Id", "Cid", "Count", "Time", "SuccCount", "SuccTime", "Tps", "AvgTime", "SuccRate", "Ct", "Mt", });
     dimit.store.conf.DimitStoreConf.getDescriptor();
   }
 

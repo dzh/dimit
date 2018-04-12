@@ -68,6 +68,24 @@ public interface ChannelOrBuilder extends
 
   /**
    * <pre>
+   * Dimit' id
+   * </pre>
+   *
+   * <code>string dimit = 6;</code>
+   */
+  java.lang.String getDimit();
+  /**
+   * <pre>
+   * Dimit' id
+   * </pre>
+   *
+   * <code>string dimit = 6;</code>
+   */
+  com.google.protobuf.ByteString
+      getDimitBytes();
+
+  /**
+   * <pre>
    * timestamp
    * </pre>
    *

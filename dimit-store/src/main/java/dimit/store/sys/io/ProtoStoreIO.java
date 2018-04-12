@@ -7,8 +7,7 @@ import com.google.protobuf.Message;
 
 import dimit.store.Channel;
 import dimit.store.ChannelGroup;
-import dimit.store.ChannelRecvStat;
-import dimit.store.ChannelSendStat;
+import dimit.store.ChannelStat;
 import dimit.store.ChannelTotalStat;
 import dimit.store.Dimit;
 import dimit.store.conf.ChannelConf;
@@ -33,7 +32,7 @@ public abstract class ProtoStoreIO implements StoreIO<Message> {
      */
     public static final <T> Message read(byte[] data, Class<T> clazz) throws IOException {
         CodedInputStream input = CodedInputStream.newInstance(data);
-        if (clazz == null) {  // readby
+        if (clazz == null) {  // maybe
             // v
             input.readTag();
             input.readUInt32(); // TODO
@@ -57,10 +56,9 @@ public abstract class ProtoStoreIO implements StoreIO<Message> {
                 return ChannelGroup.parseFrom(data);
             case MagicFlag.CHANNEL_VALUE:
                 return Channel.parseFrom(data);
-            case MagicFlag.CHANNEL_SEND_STAT_VALUE:
-                return ChannelSendStat.parseFrom(data);
-            case MagicFlag.CHANNEL_RECV_STAT_VALUE:
-                return ChannelRecvStat.parseFrom(data);
+            // stat
+            case MagicFlag.CHANNEL_STAT_VALUE:
+                return ChannelStat.parseFrom(data);
             case MagicFlag.CHANNEL_TOTAL_STAT_VALUE:
                 return ChannelTotalStat.parseFrom(data);
             default:
@@ -79,10 +77,8 @@ public abstract class ProtoStoreIO implements StoreIO<Message> {
                 return ChannelGroup.parseFrom(data);
             } else if (clazz.equals(Channel.class)) {
                 return Channel.parseFrom(data);
-            } else if (clazz.equals(ChannelSendStat.class)) {
-                return ChannelSendStat.parseFrom(data);
-            } else if (clazz.equals(ChannelRecvStat.class)) {
-                return ChannelRecvStat.parseFrom(data);
+            } else if (clazz.equals(ChannelStat.class)) {
+                return ChannelStat.parseFrom(data);
             } else if (clazz.equals(ChannelTotalStat.class)) {
                 return ChannelTotalStat.parseFrom(data);
             } else {

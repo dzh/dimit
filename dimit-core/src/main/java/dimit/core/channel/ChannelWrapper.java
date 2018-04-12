@@ -47,8 +47,11 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
 
     private RateLimiter limiter;
 
-    private ChannelWrapper(Dimiter dimiter) {
+    private ChannelStatWrapper stat;
+
+    private ChannelWrapper(Dimiter dimiter, ChannelGroupWrapper group) {
         this.dimiter = dimiter;
+        this.group = group;
         this.keys = new LinkedList<>();
     }
 
@@ -68,6 +71,7 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
                 key.cancel();
             }
         }
+        stat.close();
     }
 
     private void addWatchKey(WatchKey key) {
@@ -98,17 +102,71 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
         return store.getId();
     }
 
+    /**
+     * 
+     * @param c
+     * @return
+     * @throws Exception
+     */
     public <V> V call(Callable<V> c) throws Exception {
         if (!limiter.tryAcquire()) { throw new RateLimiterException("out of tps:" + limiter.getRate()); }
-        return c.call();
+
+        long st = System.currentTimeMillis();
+        try {
+            return c.call();
+        } finally {
+            if (stat != null) {
+                stat.incrCount();
+                stat.addTime(System.currentTimeMillis() - st);
+            }
+        }
     }
 
-    public static ChannelWrapper init(Dimiter dimiter, String gid, String cid, ChannelType type) throws IOException {
-        DimitStoreSystem dss = dimiter.getStoreSystem();
-        DimitPath groupPath = dss.getPath(StoreConst.PATH_CONF, dimiter.getDimit().conf().getId(), gid);
+    /**
+     * 增加统计功能特性: 成功率
+     * 
+     * 
+     * @param c
+     * @return
+     * @throws Exception
+     */
+    public <V> V call(ChannelCallable<V> c) throws Exception {
+        if (!limiter.tryAcquire()) { throw new RateLimiterException("out of tps:" + limiter.getRate()); }
+
+        long st = System.currentTimeMillis();
+        V v = null;
+        try {
+            v = c.call();
+            return v;
+        } finally {
+            if (stat != null) {
+                long interval = System.currentTimeMillis() - st;
+
+                stat.incrCount();
+                stat.addTime(interval);
+
+                switch (c.code(v)) { // TODO
+                case ChannelCallable.CODE_SUCC: {
+                    stat.incrSuccCount();
+                    stat.addSuccTime(interval);
+                    break;
+                }
+                case ChannelCallable.CODE_FATAL: {
+                    invalid();
+                    break;
+                }
+                }
+            }
+        }
+    }
+
+    public static ChannelWrapper init(Dimiter dimiter, ChannelGroupWrapper group, String cid, ChannelType type) throws IOException {
+        DimitStoreSystem dss = dimiter.storeSystem();
+        String gid = group.conf().getId();
+        DimitPath groupPath = dss.getPath(StoreConst.PATH_CONF, dimiter.dimit().conf().getId(), gid);
 
         // create ChannelConf
-        ChannelWrapper channel = new ChannelWrapper(dimiter);
+        ChannelWrapper channel = new ChannelWrapper(dimiter, group);
         channel.conf = groupPath.newPath(cid).<ChannelConf> toStore(ChannelConf.class);
 
         if (channel.conf == null) return null;
@@ -121,7 +179,7 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
         long ct = System.currentTimeMillis();
         float tps = channel.conf.getTps();
         Channel store = Channel.newBuilder().setId(IDUtil.storeID(MagicFlag.CHANNEL)).setCid(cid).setCt(ct).setMt(ct)
-                .setTps(tps / childrenSize).setType(type).setV(Const.V).build();
+                .setTps(tps / childrenSize).setType(type).setV(Const.V).setDimit(dimiter.id()).build();
         channel.store = store;
         // create store/cid/0|1/id
         DimitPath channelPath = channelParentPath.newPath(store.getId());
@@ -141,14 +199,24 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
         }
 
         channel.updateLimiter();
+
+        if (dimiter.statEnable()) { // enable stat
+            channel.stat = ChannelStatWrapper.init(channel);
+            dimiter.statChannel(channel);
+        }
+
         return channel;
     }
 
     private ChannelConf newChannelConf(Dimiter dimiter, String gid, String cid) throws IOException {
-        DimitStoreSystem dss = dimiter.getStoreSystem();
-        DimitPath groupPath = dss.getPath(StoreConst.PATH_CONF, dimiter.getDimit().conf().getId(), gid);
+        DimitStoreSystem dss = dimiter.storeSystem();
+        DimitPath groupPath = dss.getPath(StoreConst.PATH_CONF, dimiter.dimit().conf().getId(), gid);
 
         return groupPath.newPath(cid).<ChannelConf> toStore(ChannelConf.class);
+    }
+
+    public ChannelStatWrapper stat() {
+        return stat;
     }
 
     @Override
@@ -170,8 +238,10 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
             ChannelConf oldConf = this.conf;
             try {
                 this.conf = newChannelConf(dimiter, oldConf.getGid(), oldConf.getId());
-                // LOG.info("new conf {}", this.conf);
-                updateTps(this.conf);
+                LOG.debug("new conf {}", this.conf);
+                if (oldConf.getTps() != this.conf.getTps()) {
+                    updateTps(this.conf);
+                }
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
             }
@@ -193,34 +263,59 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
     }
 
     private void updateTps(ChannelConf conf) throws IOException {
-        DimitStoreSystem dss = dimiter.getStoreSystem();
+        DimitStoreSystem dss = dimiter.storeSystem();
 
         // update tps
         DimitPath channelPath =
                 dss.getPath(StoreConst.PATH_STORE, conf.getId(), String.valueOf(store.getType().getNumber()), store.getId());
         List<DimitPath> children = channelPath.getParent().children();
-        float maxTps = this.conf.getTps();
+        float maxTps = conf.getTps();
         this.store = this.store.toBuilder().setTps(children.isEmpty() ? maxTps : maxTps / children.size()).build();
         // write store
-        dss.<Channel> io().write(channelPath, store, StoreAttribute.EPHEMERAL);
-        LOG.info("update EPHEMERAL channel {}", store);
+        dss.<Channel> io().write(channelPath, store, StoreAttribute.EPHEMERAL); // TODO merge
+        // LOG.info("update EPHEMERAL channel {}", store);
 
         // LOG.info("update tps-{}", tps());
         updateLimiter();
     }
 
     public float tps() {
-        return this.store.getTps();
+        return store.getTps();
+    }
+
+    /**
+     * set channel ChannelStatus.INVALID
+     */
+    public void invalid() {
+        DimitStoreSystem dss = dimiter.storeSystem();
+        DimitPath path = dss.getPath(StoreConst.PATH_CONF, dimiter.dimit().conf().getId(), group.conf().getId(), conf.getId());
+        LOG.info("Invalid {}", path);
+
+        try {
+            dss.io().write(path, conf.toBuilder().setStatus(ChannelStatus.INVALID).setMt(System.currentTimeMillis()).build(),
+                    StoreAttribute.PERSISTENT);
+        } catch (Exception e) {
+            LOG.info(e.getMessage(), e);
+        }
+
     }
 
     public boolean isValid() {
         if (conf.getStatus().equals(ChannelStatus.CLOSED) || conf.getStatus().equals(ChannelStatus.INVALID)) return false;
 
-        return tps() >= 1 && priority() >= 1;
+        return tps() > 0 && priority() > StoreConst.MIN_PRIORITY;
     }
 
-    public int priority() {
-        return conf.getPriority();// TODO runtime calculation
+    public int priority() { // TODO priority cache
+        int priority = conf.getPriority();
+        if (stat != null) {
+            priority += stat.calcPriority();
+        }
+
+        if (priority > StoreConst.MAX_PRIORITY) return StoreConst.MAX_PRIORITY;
+        if (priority < StoreConst.MIN_PRIORITY) return StoreConst.MIN_PRIORITY;
+
+        return priority;
     }
 
     public boolean cantainTags(String... tags) {

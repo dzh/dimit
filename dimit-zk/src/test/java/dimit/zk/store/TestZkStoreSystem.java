@@ -32,12 +32,12 @@ public class TestZkStoreSystem {
 
     @Before
     public void testZkStoreSystem() throws Exception {
-        dss = (ZkStoreSystem) DimitStores.newStoreSystem(URI.create("dimit-zk://yp/dimit?host=127.0.0.1:2181&sleep=1000&retry=3"), null);
+        dss = (ZkStoreSystem) DimitStores.newStoreSystem(URI.create("dimit-zk://dzh/dimit?host=127.0.0.1:2181&sleep=1000&retry=3"), null);
         LOG.info("{} {}", dss.toString(), dss.getRoot().toUri());
 
         dss.close();
 
-        dss = (ZkStoreSystem) DimitStores.newStoreSystem(URI.create("dimit-zk://yp/dimit?host=127.0.0.1:2181&sleep=1000&retry=3"), null);
+        dss = (ZkStoreSystem) DimitStores.newStoreSystem(URI.create("dimit-zk://dzh/dimit?host=127.0.0.1:2181&sleep=1000&retry=3"), null);
         LOG.info("{} {}", dss.toString(), dss.getRoot().toUri());
     }
 
@@ -47,7 +47,7 @@ public class TestZkStoreSystem {
                 .setId(IDUtil.storeID(Const.V, MagicFlag.DIMIT_CONF)).setV(Const.V).setName("voice").build();
         try {
             String path = dss.zkCli().create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT)
-                    .forPath("/dimit/yp/conf/" + dimit.getId(), dimit.toByteArray());
+                    .forPath("/dimit/dzh/conf/" + dimit.getId(), dimit.toByteArray());
             LOG.info("create {}", path);
 
             dss.zkCli().delete().deletingChildrenIfNeeded().forPath(path);

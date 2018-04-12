@@ -22,6 +22,7 @@ private static final long serialVersionUID = 0L;
     v_ = 0;
     id_ = "";
     cid_ = "";
+    dimit_ = "";
     ct_ = 0L;
     mt_ = 0L;
   }
@@ -72,6 +73,12 @@ private static final long serialVersionUID = 0L;
             java.lang.String s = input.readStringRequireUtf8();
 
             cid_ = s;
+            break;
+          }
+          case 50: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            dimit_ = s;
             break;
           }
           case 72: {
@@ -201,6 +208,48 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int DIMIT_FIELD_NUMBER = 6;
+  private volatile java.lang.Object dimit_;
+  /**
+   * <pre>
+   * Dimit' id
+   * </pre>
+   *
+   * <code>string dimit = 6;</code>
+   */
+  public java.lang.String getDimit() {
+    java.lang.Object ref = dimit_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      dimit_ = s;
+      return s;
+    }
+  }
+  /**
+   * <pre>
+   * Dimit' id
+   * </pre>
+   *
+   * <code>string dimit = 6;</code>
+   */
+  public com.google.protobuf.ByteString
+      getDimitBytes() {
+    java.lang.Object ref = dimit_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      dimit_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   public static final int CT_FIELD_NUMBER = 9;
   private long ct_;
   /**
@@ -248,6 +297,9 @@ private static final long serialVersionUID = 0L;
     if (!getCidBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, cid_);
     }
+    if (!getDimitBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, dimit_);
+    }
     if (ct_ != 0L) {
       output.writeUInt64(9, ct_);
     }
@@ -271,6 +323,9 @@ private static final long serialVersionUID = 0L;
     }
     if (!getCidBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, cid_);
+    }
+    if (!getDimitBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, dimit_);
     }
     if (ct_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
@@ -302,6 +357,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getId());
     result = result && getCid()
         .equals(other.getCid());
+    result = result && getDimit()
+        .equals(other.getDimit());
     result = result && (getCt()
         == other.getCt());
     result = result && (getMt()
@@ -323,6 +380,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + CID_FIELD_NUMBER;
     hash = (53 * hash) + getCid().hashCode();
+    hash = (37 * hash) + DIMIT_FIELD_NUMBER;
+    hash = (53 * hash) + getDimit().hashCode();
     hash = (37 * hash) + CT_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getCt());
@@ -467,6 +526,8 @@ private static final long serialVersionUID = 0L;
 
       cid_ = "";
 
+      dimit_ = "";
+
       ct_ = 0L;
 
       mt_ = 0L;
@@ -496,6 +557,7 @@ private static final long serialVersionUID = 0L;
       result.v_ = v_;
       result.id_ = id_;
       result.cid_ = cid_;
+      result.dimit_ = dimit_;
       result.ct_ = ct_;
       result.mt_ = mt_;
       onBuilt();
@@ -548,6 +610,10 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getCid().isEmpty()) {
         cid_ = other.cid_;
+        onChanged();
+      }
+      if (!other.getDimit().isEmpty()) {
+        dimit_ = other.dimit_;
         onChanged();
       }
       if (other.getCt() != 0L) {
@@ -783,6 +849,95 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       cid_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object dimit_ = "";
+    /**
+     * <pre>
+     * Dimit' id
+     * </pre>
+     *
+     * <code>string dimit = 6;</code>
+     */
+    public java.lang.String getDimit() {
+      java.lang.Object ref = dimit_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        dimit_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <pre>
+     * Dimit' id
+     * </pre>
+     *
+     * <code>string dimit = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDimitBytes() {
+      java.lang.Object ref = dimit_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        dimit_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <pre>
+     * Dimit' id
+     * </pre>
+     *
+     * <code>string dimit = 6;</code>
+     */
+    public Builder setDimit(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      dimit_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Dimit' id
+     * </pre>
+     *
+     * <code>string dimit = 6;</code>
+     */
+    public Builder clearDimit() {
+      
+      dimit_ = getDefaultInstance().getDimit();
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Dimit' id
+     * </pre>
+     *
+     * <code>string dimit = 6;</code>
+     */
+    public Builder setDimitBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      dimit_ = value;
       onChanged();
       return this;
     }

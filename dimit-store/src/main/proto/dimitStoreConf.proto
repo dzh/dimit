@@ -6,7 +6,7 @@ option java_multiple_files = true;
 //range:[0,255]
 enum MagicFlag {
 
-// conf
+    // conf
     DIMIT_CONF = 0;
     CHANNEL_GROUP_CONF = 1;
     CHANNEL_CONF = 2;
@@ -15,9 +15,10 @@ enum MagicFlag {
     DIMIT = 3;
     CHANNEL_GROUP = 4;
     CHANNEL = 5;
-    CHANNEL_SEND_STAT = 6;
-    CHANNEL_RECV_STAT = 7;
-    CHANNEL_TOTAL_STAT = 8;
+    
+    // stat
+    CHANNEL_STAT = 6;
+    CHANNEL_TOTAL_STAT = 7;
 }
 
 //

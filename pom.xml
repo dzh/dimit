@@ -10,6 +10,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.7</jdk.version>
+		<dimit.version>${project.version}</dimit.version>
 	</properties>
 
 	<profiles>
@@ -188,7 +189,7 @@
 		<url>https://github.com/dzh/dimit/issues</url>
 		<system>GitHub Issue Management</system>
 	</issueManagement>
-	<description>Distributed Traffic Control Framework</description>
+	<description>The Distributed Traffic Control Framework</description>
 	<modules>
 		<module>dimit-core</module>
 		<module>dimit-admin</module>

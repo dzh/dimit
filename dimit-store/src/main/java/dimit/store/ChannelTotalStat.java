@@ -17,14 +17,15 @@ private static final long serialVersionUID = 0L;
   }
   private ChannelTotalStat() {
     v_ = 0;
+    id_ = "";
     cid_ = "";
-    sendSuccCount_ = 0L;
-    sendFailCount_ = 0L;
-    sendSuccTime_ = 0L;
-    sendFailTime_ = 0L;
-    recvSuccCount_ = 0L;
-    recvFailCount_ = 0L;
-    sendRecvTime_ = 0L;
+    count_ = 0L;
+    time_ = 0L;
+    succCount_ = 0L;
+    succTime_ = 0L;
+    tps_ = 0D;
+    avgTime_ = 0D;
+    succRate_ = 0D;
     ct_ = 0L;
     mt_ = 0L;
   }
@@ -68,37 +69,38 @@ private static final long serialVersionUID = 0L;
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            cid_ = s;
+            id_ = s;
             break;
           }
-          case 24: {
+          case 26: {
+            java.lang.String s = input.readStringRequireUtf8();
 
-            sendSuccCount_ = input.readUInt64();
+            cid_ = s;
             break;
           }
           case 32: {
 
-            sendFailCount_ = input.readUInt64();
+            count_ = input.readUInt64();
             break;
           }
           case 40: {
 
-            sendSuccTime_ = input.readUInt64();
+            time_ = input.readUInt64();
             break;
           }
           case 48: {
 
-            sendFailTime_ = input.readUInt64();
+            succCount_ = input.readUInt64();
             break;
           }
           case 56: {
 
-            recvSuccCount_ = input.readUInt64();
+            succTime_ = input.readUInt64();
             break;
           }
-          case 64: {
+          case 65: {
 
-            recvFailCount_ = input.readUInt64();
+            tps_ = input.readDouble();
             break;
           }
           case 72: {
@@ -111,9 +113,14 @@ private static final long serialVersionUID = 0L;
             mt_ = input.readUInt64();
             break;
           }
-          case 96: {
+          case 89: {
 
-            sendRecvTime_ = input.readUInt64();
+            avgTime_ = input.readDouble();
+            break;
+          }
+          case 97: {
+
+            succRate_ = input.readDouble();
             break;
           }
         }
@@ -149,14 +156,48 @@ private static final long serialVersionUID = 0L;
     return v_;
   }
 
-  public static final int CID_FIELD_NUMBER = 2;
+  public static final int ID_FIELD_NUMBER = 2;
+  private volatile java.lang.Object id_;
+  /**
+   * <code>string id = 2;</code>
+   */
+  public java.lang.String getId() {
+    java.lang.Object ref = id_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      id_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string id = 2;</code>
+   */
+  public com.google.protobuf.ByteString
+      getIdBytes() {
+    java.lang.Object ref = id_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      id_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int CID_FIELD_NUMBER = 3;
   private volatile java.lang.Object cid_;
   /**
    * <pre>
    * ChannelConf's id
    * </pre>
    *
-   * <code>string cid = 2;</code>
+   * <code>string cid = 3;</code>
    */
   public java.lang.String getCid() {
     java.lang.Object ref = cid_;
@@ -175,7 +216,7 @@ private static final long serialVersionUID = 0L;
    * ChannelConf's id
    * </pre>
    *
-   * <code>string cid = 2;</code>
+   * <code>string cid = 3;</code>
    */
   public com.google.protobuf.ByteString
       getCidBytes() {
@@ -191,75 +232,83 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int SENDSUCCCOUNT_FIELD_NUMBER = 3;
-  private long sendSuccCount_;
-  /**
-   * <code>uint64 sendSuccCount = 3;</code>
-   */
-  public long getSendSuccCount() {
-    return sendSuccCount_;
-  }
-
-  public static final int SENDFAILCOUNT_FIELD_NUMBER = 4;
-  private long sendFailCount_;
-  /**
-   * <code>uint64 sendFailCount = 4;</code>
-   */
-  public long getSendFailCount() {
-    return sendFailCount_;
-  }
-
-  public static final int SENDSUCCTIME_FIELD_NUMBER = 5;
-  private long sendSuccTime_;
+  public static final int COUNT_FIELD_NUMBER = 4;
+  private long count_;
   /**
    * <pre>
-   *  millisecond
+   * accumulative
    * </pre>
    *
-   * <code>uint64 sendSuccTime = 5;</code>
+   * <code>uint64 count = 4;</code>
    */
-  public long getSendSuccTime() {
-    return sendSuccTime_;
+  public long getCount() {
+    return count_;
   }
 
-  public static final int SENDFAILTIME_FIELD_NUMBER = 6;
-  private long sendFailTime_;
-  /**
-   * <code>uint64 sendFailTime = 6;</code>
-   */
-  public long getSendFailTime() {
-    return sendFailTime_;
-  }
-
-  public static final int RECVSUCCCOUNT_FIELD_NUMBER = 7;
-  private long recvSuccCount_;
-  /**
-   * <code>uint64 recvSuccCount = 7;</code>
-   */
-  public long getRecvSuccCount() {
-    return recvSuccCount_;
-  }
-
-  public static final int RECVFAILCOUNT_FIELD_NUMBER = 8;
-  private long recvFailCount_;
-  /**
-   * <code>uint64 recvFailCount = 8;</code>
-   */
-  public long getRecvFailCount() {
-    return recvFailCount_;
-  }
-
-  public static final int SENDRECVTIME_FIELD_NUMBER = 12;
-  private long sendRecvTime_;
+  public static final int TIME_FIELD_NUMBER = 5;
+  private long time_;
   /**
    * <pre>
-   *total(ms = back - send)
+   * total send millisecond
    * </pre>
    *
-   * <code>uint64 sendRecvTime = 12;</code>
+   * <code>uint64 time = 5;</code>
    */
-  public long getSendRecvTime() {
-    return sendRecvTime_;
+  public long getTime() {
+    return time_;
+  }
+
+  public static final int SUCCCOUNT_FIELD_NUMBER = 6;
+  private long succCount_;
+  /**
+   * <code>uint64 succCount = 6;</code>
+   */
+  public long getSuccCount() {
+    return succCount_;
+  }
+
+  public static final int SUCCTIME_FIELD_NUMBER = 7;
+  private long succTime_;
+  /**
+   * <code>uint64 succTime = 7;</code>
+   */
+  public long getSuccTime() {
+    return succTime_;
+  }
+
+  public static final int TPS_FIELD_NUMBER = 8;
+  private double tps_;
+  /**
+   * <pre>
+   * interval mean
+   * </pre>
+   *
+   * <code>double tps = 8;</code>
+   */
+  public double getTps() {
+    return tps_;
+  }
+
+  public static final int AVGTIME_FIELD_NUMBER = 11;
+  private double avgTime_;
+  /**
+   * <pre>
+   * average calling millisecond
+   * </pre>
+   *
+   * <code>double avgTime = 11;</code>
+   */
+  public double getAvgTime() {
+    return avgTime_;
+  }
+
+  public static final int SUCCRATE_FIELD_NUMBER = 12;
+  private double succRate_;
+  /**
+   * <code>double succRate = 12;</code>
+   */
+  public double getSuccRate() {
+    return succRate_;
   }
 
   public static final int CT_FIELD_NUMBER = 9;
@@ -303,26 +352,26 @@ private static final long serialVersionUID = 0L;
     if (v_ != 0) {
       output.writeUInt32(1, v_);
     }
+    if (!getIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, id_);
+    }
     if (!getCidBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, cid_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, cid_);
     }
-    if (sendSuccCount_ != 0L) {
-      output.writeUInt64(3, sendSuccCount_);
+    if (count_ != 0L) {
+      output.writeUInt64(4, count_);
     }
-    if (sendFailCount_ != 0L) {
-      output.writeUInt64(4, sendFailCount_);
+    if (time_ != 0L) {
+      output.writeUInt64(5, time_);
     }
-    if (sendSuccTime_ != 0L) {
-      output.writeUInt64(5, sendSuccTime_);
+    if (succCount_ != 0L) {
+      output.writeUInt64(6, succCount_);
     }
-    if (sendFailTime_ != 0L) {
-      output.writeUInt64(6, sendFailTime_);
+    if (succTime_ != 0L) {
+      output.writeUInt64(7, succTime_);
     }
-    if (recvSuccCount_ != 0L) {
-      output.writeUInt64(7, recvSuccCount_);
-    }
-    if (recvFailCount_ != 0L) {
-      output.writeUInt64(8, recvFailCount_);
+    if (tps_ != 0D) {
+      output.writeDouble(8, tps_);
     }
     if (ct_ != 0L) {
       output.writeUInt64(9, ct_);
@@ -330,8 +379,11 @@ private static final long serialVersionUID = 0L;
     if (mt_ != 0L) {
       output.writeUInt64(10, mt_);
     }
-    if (sendRecvTime_ != 0L) {
-      output.writeUInt64(12, sendRecvTime_);
+    if (avgTime_ != 0D) {
+      output.writeDouble(11, avgTime_);
+    }
+    if (succRate_ != 0D) {
+      output.writeDouble(12, succRate_);
     }
     unknownFields.writeTo(output);
   }
@@ -345,32 +397,31 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeUInt32Size(1, v_);
     }
+    if (!getIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, id_);
+    }
     if (!getCidBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, cid_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, cid_);
     }
-    if (sendSuccCount_ != 0L) {
+    if (count_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(3, sendSuccCount_);
+        .computeUInt64Size(4, count_);
     }
-    if (sendFailCount_ != 0L) {
+    if (time_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(4, sendFailCount_);
+        .computeUInt64Size(5, time_);
     }
-    if (sendSuccTime_ != 0L) {
+    if (succCount_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(5, sendSuccTime_);
+        .computeUInt64Size(6, succCount_);
     }
-    if (sendFailTime_ != 0L) {
+    if (succTime_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(6, sendFailTime_);
+        .computeUInt64Size(7, succTime_);
     }
-    if (recvSuccCount_ != 0L) {
+    if (tps_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(7, recvSuccCount_);
-    }
-    if (recvFailCount_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(8, recvFailCount_);
+        .computeDoubleSize(8, tps_);
     }
     if (ct_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
@@ -380,9 +431,13 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeUInt64Size(10, mt_);
     }
-    if (sendRecvTime_ != 0L) {
+    if (avgTime_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(12, sendRecvTime_);
+        .computeDoubleSize(11, avgTime_);
+    }
+    if (succRate_ != 0D) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeDoubleSize(12, succRate_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -402,22 +457,30 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && (getV()
         == other.getV());
+    result = result && getId()
+        .equals(other.getId());
     result = result && getCid()
         .equals(other.getCid());
-    result = result && (getSendSuccCount()
-        == other.getSendSuccCount());
-    result = result && (getSendFailCount()
-        == other.getSendFailCount());
-    result = result && (getSendSuccTime()
-        == other.getSendSuccTime());
-    result = result && (getSendFailTime()
-        == other.getSendFailTime());
-    result = result && (getRecvSuccCount()
-        == other.getRecvSuccCount());
-    result = result && (getRecvFailCount()
-        == other.getRecvFailCount());
-    result = result && (getSendRecvTime()
-        == other.getSendRecvTime());
+    result = result && (getCount()
+        == other.getCount());
+    result = result && (getTime()
+        == other.getTime());
+    result = result && (getSuccCount()
+        == other.getSuccCount());
+    result = result && (getSuccTime()
+        == other.getSuccTime());
+    result = result && (
+        java.lang.Double.doubleToLongBits(getTps())
+        == java.lang.Double.doubleToLongBits(
+            other.getTps()));
+    result = result && (
+        java.lang.Double.doubleToLongBits(getAvgTime())
+        == java.lang.Double.doubleToLongBits(
+            other.getAvgTime()));
+    result = result && (
+        java.lang.Double.doubleToLongBits(getSuccRate())
+        == java.lang.Double.doubleToLongBits(
+            other.getSuccRate()));
     result = result && (getCt()
         == other.getCt());
     result = result && (getMt()
@@ -435,29 +498,31 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + V_FIELD_NUMBER;
     hash = (53 * hash) + getV();
+    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + CID_FIELD_NUMBER;
     hash = (53 * hash) + getCid().hashCode();
-    hash = (37 * hash) + SENDSUCCCOUNT_FIELD_NUMBER;
+    hash = (37 * hash) + COUNT_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getSendSuccCount());
-    hash = (37 * hash) + SENDFAILCOUNT_FIELD_NUMBER;
+        getCount());
+    hash = (37 * hash) + TIME_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getSendFailCount());
-    hash = (37 * hash) + SENDSUCCTIME_FIELD_NUMBER;
+        getTime());
+    hash = (37 * hash) + SUCCCOUNT_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getSendSuccTime());
-    hash = (37 * hash) + SENDFAILTIME_FIELD_NUMBER;
+        getSuccCount());
+    hash = (37 * hash) + SUCCTIME_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getSendFailTime());
-    hash = (37 * hash) + RECVSUCCCOUNT_FIELD_NUMBER;
+        getSuccTime());
+    hash = (37 * hash) + TPS_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getRecvSuccCount());
-    hash = (37 * hash) + RECVFAILCOUNT_FIELD_NUMBER;
+        java.lang.Double.doubleToLongBits(getTps()));
+    hash = (37 * hash) + AVGTIME_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getRecvFailCount());
-    hash = (37 * hash) + SENDRECVTIME_FIELD_NUMBER;
+        java.lang.Double.doubleToLongBits(getAvgTime()));
+    hash = (37 * hash) + SUCCRATE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getSendRecvTime());
+        java.lang.Double.doubleToLongBits(getSuccRate()));
     hash = (37 * hash) + CT_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getCt());
@@ -595,21 +660,23 @@ private static final long serialVersionUID = 0L;
       super.clear();
       v_ = 0;
 
+      id_ = "";
+
       cid_ = "";
 
-      sendSuccCount_ = 0L;
+      count_ = 0L;
 
-      sendFailCount_ = 0L;
+      time_ = 0L;
 
-      sendSuccTime_ = 0L;
+      succCount_ = 0L;
 
-      sendFailTime_ = 0L;
+      succTime_ = 0L;
 
-      recvSuccCount_ = 0L;
+      tps_ = 0D;
 
-      recvFailCount_ = 0L;
+      avgTime_ = 0D;
 
-      sendRecvTime_ = 0L;
+      succRate_ = 0D;
 
       ct_ = 0L;
 
@@ -638,14 +705,15 @@ private static final long serialVersionUID = 0L;
     public dimit.store.ChannelTotalStat buildPartial() {
       dimit.store.ChannelTotalStat result = new dimit.store.ChannelTotalStat(this);
       result.v_ = v_;
+      result.id_ = id_;
       result.cid_ = cid_;
-      result.sendSuccCount_ = sendSuccCount_;
-      result.sendFailCount_ = sendFailCount_;
-      result.sendSuccTime_ = sendSuccTime_;
-      result.sendFailTime_ = sendFailTime_;
-      result.recvSuccCount_ = recvSuccCount_;
-      result.recvFailCount_ = recvFailCount_;
-      result.sendRecvTime_ = sendRecvTime_;
+      result.count_ = count_;
+      result.time_ = time_;
+      result.succCount_ = succCount_;
+      result.succTime_ = succTime_;
+      result.tps_ = tps_;
+      result.avgTime_ = avgTime_;
+      result.succRate_ = succRate_;
       result.ct_ = ct_;
       result.mt_ = mt_;
       onBuilt();
@@ -692,30 +760,34 @@ private static final long serialVersionUID = 0L;
       if (other.getV() != 0) {
         setV(other.getV());
       }
+      if (!other.getId().isEmpty()) {
+        id_ = other.id_;
+        onChanged();
+      }
       if (!other.getCid().isEmpty()) {
         cid_ = other.cid_;
         onChanged();
       }
-      if (other.getSendSuccCount() != 0L) {
-        setSendSuccCount(other.getSendSuccCount());
+      if (other.getCount() != 0L) {
+        setCount(other.getCount());
       }
-      if (other.getSendFailCount() != 0L) {
-        setSendFailCount(other.getSendFailCount());
+      if (other.getTime() != 0L) {
+        setTime(other.getTime());
       }
-      if (other.getSendSuccTime() != 0L) {
-        setSendSuccTime(other.getSendSuccTime());
+      if (other.getSuccCount() != 0L) {
+        setSuccCount(other.getSuccCount());
       }
-      if (other.getSendFailTime() != 0L) {
-        setSendFailTime(other.getSendFailTime());
+      if (other.getSuccTime() != 0L) {
+        setSuccTime(other.getSuccTime());
       }
-      if (other.getRecvSuccCount() != 0L) {
-        setRecvSuccCount(other.getRecvSuccCount());
+      if (other.getTps() != 0D) {
+        setTps(other.getTps());
       }
-      if (other.getRecvFailCount() != 0L) {
-        setRecvFailCount(other.getRecvFailCount());
+      if (other.getAvgTime() != 0D) {
+        setAvgTime(other.getAvgTime());
       }
-      if (other.getSendRecvTime() != 0L) {
-        setSendRecvTime(other.getSendRecvTime());
+      if (other.getSuccRate() != 0D) {
+        setSuccRate(other.getSuccRate());
       }
       if (other.getCt() != 0L) {
         setCt(other.getCt());
@@ -776,13 +848,82 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
+    private java.lang.Object id_ = "";
+    /**
+     * <code>string id = 2;</code>
+     */
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        id_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string id = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIdBytes() {
+      java.lang.Object ref = id_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        id_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string id = 2;</code>
+     */
+    public Builder setId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      id_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string id = 2;</code>
+     */
+    public Builder clearId() {
+      
+      id_ = getDefaultInstance().getId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string id = 2;</code>
+     */
+    public Builder setIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      id_ = value;
+      onChanged();
+      return this;
+    }
+
     private java.lang.Object cid_ = "";
     /**
      * <pre>
      * ChannelConf's id
      * </pre>
      *
-     * <code>string cid = 2;</code>
+     * <code>string cid = 3;</code>
      */
     public java.lang.String getCid() {
       java.lang.Object ref = cid_;
@@ -801,7 +942,7 @@ private static final long serialVersionUID = 0L;
      * ChannelConf's id
      * </pre>
      *
-     * <code>string cid = 2;</code>
+     * <code>string cid = 3;</code>
      */
     public com.google.protobuf.ByteString
         getCidBytes() {
@@ -821,7 +962,7 @@ private static final long serialVersionUID = 0L;
      * ChannelConf's id
      * </pre>
      *
-     * <code>string cid = 2;</code>
+     * <code>string cid = 3;</code>
      */
     public Builder setCid(
         java.lang.String value) {
@@ -838,7 +979,7 @@ private static final long serialVersionUID = 0L;
      * ChannelConf's id
      * </pre>
      *
-     * <code>string cid = 2;</code>
+     * <code>string cid = 3;</code>
      */
     public Builder clearCid() {
       
@@ -851,7 +992,7 @@ private static final long serialVersionUID = 0L;
      * ChannelConf's id
      * </pre>
      *
-     * <code>string cid = 2;</code>
+     * <code>string cid = 3;</code>
      */
     public Builder setCidBytes(
         com.google.protobuf.ByteString value) {
@@ -865,208 +1006,232 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long sendSuccCount_ ;
-    /**
-     * <code>uint64 sendSuccCount = 3;</code>
-     */
-    public long getSendSuccCount() {
-      return sendSuccCount_;
-    }
-    /**
-     * <code>uint64 sendSuccCount = 3;</code>
-     */
-    public Builder setSendSuccCount(long value) {
-      
-      sendSuccCount_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>uint64 sendSuccCount = 3;</code>
-     */
-    public Builder clearSendSuccCount() {
-      
-      sendSuccCount_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private long sendFailCount_ ;
-    /**
-     * <code>uint64 sendFailCount = 4;</code>
-     */
-    public long getSendFailCount() {
-      return sendFailCount_;
-    }
-    /**
-     * <code>uint64 sendFailCount = 4;</code>
-     */
-    public Builder setSendFailCount(long value) {
-      
-      sendFailCount_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>uint64 sendFailCount = 4;</code>
-     */
-    public Builder clearSendFailCount() {
-      
-      sendFailCount_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private long sendSuccTime_ ;
+    private long count_ ;
     /**
      * <pre>
-     *  millisecond
+     * accumulative
      * </pre>
      *
-     * <code>uint64 sendSuccTime = 5;</code>
+     * <code>uint64 count = 4;</code>
      */
-    public long getSendSuccTime() {
-      return sendSuccTime_;
+    public long getCount() {
+      return count_;
     }
     /**
      * <pre>
-     *  millisecond
+     * accumulative
      * </pre>
      *
-     * <code>uint64 sendSuccTime = 5;</code>
+     * <code>uint64 count = 4;</code>
      */
-    public Builder setSendSuccTime(long value) {
+    public Builder setCount(long value) {
       
-      sendSuccTime_ = value;
+      count_ = value;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     *  millisecond
+     * accumulative
      * </pre>
      *
-     * <code>uint64 sendSuccTime = 5;</code>
+     * <code>uint64 count = 4;</code>
      */
-    public Builder clearSendSuccTime() {
+    public Builder clearCount() {
       
-      sendSuccTime_ = 0L;
+      count_ = 0L;
       onChanged();
       return this;
     }
 
-    private long sendFailTime_ ;
-    /**
-     * <code>uint64 sendFailTime = 6;</code>
-     */
-    public long getSendFailTime() {
-      return sendFailTime_;
-    }
-    /**
-     * <code>uint64 sendFailTime = 6;</code>
-     */
-    public Builder setSendFailTime(long value) {
-      
-      sendFailTime_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>uint64 sendFailTime = 6;</code>
-     */
-    public Builder clearSendFailTime() {
-      
-      sendFailTime_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private long recvSuccCount_ ;
-    /**
-     * <code>uint64 recvSuccCount = 7;</code>
-     */
-    public long getRecvSuccCount() {
-      return recvSuccCount_;
-    }
-    /**
-     * <code>uint64 recvSuccCount = 7;</code>
-     */
-    public Builder setRecvSuccCount(long value) {
-      
-      recvSuccCount_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>uint64 recvSuccCount = 7;</code>
-     */
-    public Builder clearRecvSuccCount() {
-      
-      recvSuccCount_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private long recvFailCount_ ;
-    /**
-     * <code>uint64 recvFailCount = 8;</code>
-     */
-    public long getRecvFailCount() {
-      return recvFailCount_;
-    }
-    /**
-     * <code>uint64 recvFailCount = 8;</code>
-     */
-    public Builder setRecvFailCount(long value) {
-      
-      recvFailCount_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>uint64 recvFailCount = 8;</code>
-     */
-    public Builder clearRecvFailCount() {
-      
-      recvFailCount_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private long sendRecvTime_ ;
+    private long time_ ;
     /**
      * <pre>
-     *total(ms = back - send)
+     * total send millisecond
      * </pre>
      *
-     * <code>uint64 sendRecvTime = 12;</code>
+     * <code>uint64 time = 5;</code>
      */
-    public long getSendRecvTime() {
-      return sendRecvTime_;
+    public long getTime() {
+      return time_;
     }
     /**
      * <pre>
-     *total(ms = back - send)
+     * total send millisecond
      * </pre>
      *
-     * <code>uint64 sendRecvTime = 12;</code>
+     * <code>uint64 time = 5;</code>
      */
-    public Builder setSendRecvTime(long value) {
+    public Builder setTime(long value) {
       
-      sendRecvTime_ = value;
+      time_ = value;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     *total(ms = back - send)
+     * total send millisecond
      * </pre>
      *
-     * <code>uint64 sendRecvTime = 12;</code>
+     * <code>uint64 time = 5;</code>
      */
-    public Builder clearSendRecvTime() {
+    public Builder clearTime() {
       
-      sendRecvTime_ = 0L;
+      time_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long succCount_ ;
+    /**
+     * <code>uint64 succCount = 6;</code>
+     */
+    public long getSuccCount() {
+      return succCount_;
+    }
+    /**
+     * <code>uint64 succCount = 6;</code>
+     */
+    public Builder setSuccCount(long value) {
+      
+      succCount_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>uint64 succCount = 6;</code>
+     */
+    public Builder clearSuccCount() {
+      
+      succCount_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long succTime_ ;
+    /**
+     * <code>uint64 succTime = 7;</code>
+     */
+    public long getSuccTime() {
+      return succTime_;
+    }
+    /**
+     * <code>uint64 succTime = 7;</code>
+     */
+    public Builder setSuccTime(long value) {
+      
+      succTime_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>uint64 succTime = 7;</code>
+     */
+    public Builder clearSuccTime() {
+      
+      succTime_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private double tps_ ;
+    /**
+     * <pre>
+     * interval mean
+     * </pre>
+     *
+     * <code>double tps = 8;</code>
+     */
+    public double getTps() {
+      return tps_;
+    }
+    /**
+     * <pre>
+     * interval mean
+     * </pre>
+     *
+     * <code>double tps = 8;</code>
+     */
+    public Builder setTps(double value) {
+      
+      tps_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * interval mean
+     * </pre>
+     *
+     * <code>double tps = 8;</code>
+     */
+    public Builder clearTps() {
+      
+      tps_ = 0D;
+      onChanged();
+      return this;
+    }
+
+    private double avgTime_ ;
+    /**
+     * <pre>
+     * average calling millisecond
+     * </pre>
+     *
+     * <code>double avgTime = 11;</code>
+     */
+    public double getAvgTime() {
+      return avgTime_;
+    }
+    /**
+     * <pre>
+     * average calling millisecond
+     * </pre>
+     *
+     * <code>double avgTime = 11;</code>
+     */
+    public Builder setAvgTime(double value) {
+      
+      avgTime_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * average calling millisecond
+     * </pre>
+     *
+     * <code>double avgTime = 11;</code>
+     */
+    public Builder clearAvgTime() {
+      
+      avgTime_ = 0D;
+      onChanged();
+      return this;
+    }
+
+    private double succRate_ ;
+    /**
+     * <code>double succRate = 12;</code>
+     */
+    public double getSuccRate() {
+      return succRate_;
+    }
+    /**
+     * <code>double succRate = 12;</code>
+     */
+    public Builder setSuccRate(double value) {
+      
+      succRate_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>double succRate = 12;</code>
+     */
+    public Builder clearSuccRate() {
+      
+      succRate_ = 0D;
       onChanged();
       return this;
     }

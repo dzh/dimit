@@ -35,7 +35,7 @@ public class DimiterDemo implements Closeable {
     }
 
     public ChannelGroupWrapper initChannelGroup(String gid) throws IOException {
-        DimitWrapper dimit = dimiter.getDimit();
+        DimitWrapper dimit = dimiter.dimit();
         return dimit.newChannelGroup(gid);
     }
 

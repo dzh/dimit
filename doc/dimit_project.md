@@ -8,16 +8,20 @@ Dimit工程
     - dimit-admin   管理dimit配置，实时显示运行状态
         - TODO
     - dimit-core                    流控器逻辑实现
-        - Dimiter                   一个流控器实例对应一个DimitConf实现
+        - ChannelStatWorker         定时对ChannelWraper.stat作快照、统计、同步
+        - Dimiter                   流控器实例对应一个DimitConf实现
+        - ChannelCallable           用于ChannelWrapper.call中统计等
         - ChannelGroupWrapper       通道组运行时
         - ChannelSelector           通道选择器，从一个通道组内选择可用的通道
+        - ChannelStatWrapper        通道调用的统计数据
         - ChannelWrapper            通道运行时
         - DimitWrapper              流控器实例
         - RateLimiterException      通道超过tps时的异常,ChannelWrapper.call()触发
-        - StoreWrapper              Wrapper的接口定义
-    - dimit-demo                示例
+        - StatWrapper               Stat的接口定义
+        - StoreWrapper              Store的接口定义
+    - dimit-demo                测试用例
         - TestDimiterDemo       流控器功能单元测试
-        - TestZkStoreConfDemo   StoreSystem创建Conf配置单元测试
+        - TestZkStoreConfDemo   初始化测试数据, StoreSystem创建Conf配置
     - dimit-redis   质量分析
         - TODO
     - dimit-store                       StoreSystem基础功能

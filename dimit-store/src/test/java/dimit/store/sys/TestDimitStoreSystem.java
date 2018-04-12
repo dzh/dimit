@@ -21,7 +21,7 @@ public class TestDimitStoreSystem {
     @Ignore
     public void testDimitUri() {
         String fsType = "zk";
-        String dfsPath = "yp";
+        String dfsPath = "dzh";
 
         URI dfsUri = URI.create("dimit-" + fsType + "://dimit/" + dfsPath + "?host=192.168.1.1:2181,192.168.1.2:2181");
         LOG.info("scheme:{}", dfsUri.getScheme());

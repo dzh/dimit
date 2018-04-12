@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>io.github.dzh</groupId>
 			<artifactId>dimit-store</artifactId>
-			<version>${project.version}</version>
+			<version>${dimit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.curator</groupId>

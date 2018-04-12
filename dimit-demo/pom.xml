@@ -11,12 +11,12 @@
 		<dependency>
 			<groupId>io.github.dzh</groupId>
 			<artifactId>dimit-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${dimit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.dzh</groupId>
 			<artifactId>dimit-zk</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${dimit.version}</version>
 		</dependency>
 	</dependencies>
 </project>

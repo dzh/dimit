@@ -45,17 +45,17 @@ public enum MagicFlag
    */
   CHANNEL(5),
   /**
-   * <code>CHANNEL_SEND_STAT = 6;</code>
+   * <pre>
+   * stat
+   * </pre>
+   *
+   * <code>CHANNEL_STAT = 6;</code>
    */
-  CHANNEL_SEND_STAT(6),
+  CHANNEL_STAT(6),
   /**
-   * <code>CHANNEL_RECV_STAT = 7;</code>
+   * <code>CHANNEL_TOTAL_STAT = 7;</code>
    */
-  CHANNEL_RECV_STAT(7),
-  /**
-   * <code>CHANNEL_TOTAL_STAT = 8;</code>
-   */
-  CHANNEL_TOTAL_STAT(8),
+  CHANNEL_TOTAL_STAT(7),
   UNRECOGNIZED(-1),
   ;
 
@@ -92,17 +92,17 @@ public enum MagicFlag
    */
   public static final int CHANNEL_VALUE = 5;
   /**
-   * <code>CHANNEL_SEND_STAT = 6;</code>
+   * <pre>
+   * stat
+   * </pre>
+   *
+   * <code>CHANNEL_STAT = 6;</code>
    */
-  public static final int CHANNEL_SEND_STAT_VALUE = 6;
+  public static final int CHANNEL_STAT_VALUE = 6;
   /**
-   * <code>CHANNEL_RECV_STAT = 7;</code>
+   * <code>CHANNEL_TOTAL_STAT = 7;</code>
    */
-  public static final int CHANNEL_RECV_STAT_VALUE = 7;
-  /**
-   * <code>CHANNEL_TOTAL_STAT = 8;</code>
-   */
-  public static final int CHANNEL_TOTAL_STAT_VALUE = 8;
+  public static final int CHANNEL_TOTAL_STAT_VALUE = 7;
 
 
   public final int getNumber() {
@@ -129,9 +129,8 @@ public enum MagicFlag
       case 3: return DIMIT;
       case 4: return CHANNEL_GROUP;
       case 5: return CHANNEL;
-      case 6: return CHANNEL_SEND_STAT;
-      case 7: return CHANNEL_RECV_STAT;
-      case 8: return CHANNEL_TOTAL_STAT;
+      case 6: return CHANNEL_STAT;
+      case 7: return CHANNEL_TOTAL_STAT;
       default: return null;
     }
   }

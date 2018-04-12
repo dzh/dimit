@@ -72,7 +72,7 @@ public class ZkStoreConfDemo implements Closeable {
     public DimitPath createChannelConf(String did, String gid, String id, String name, ChannelStatus status, int priority, float tps,
             List<String> tags) throws IOException {
         long ct = System.currentTimeMillis();
-        ChannelConf storeConf = ChannelConf.newBuilder().setCt(ct).setGid(gid).setId(id).setMt(ct).setName(name).setPriority(100)
+        ChannelConf storeConf = ChannelConf.newBuilder().setCt(ct).setGid(gid).setId(id).setMt(ct).setName(name).setPriority(priority)
                 .setStatus(status).setTps(tps).setV(Const.V).addAllTag(tags).build();
 
         DimitPath path = confPath.newPath(did).newPath(gid).newPath(id);

@@ -42,8 +42,8 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
     }
 
     public static final ChannelGroupWrapper init(Dimiter dimiter, String cid) throws IOException {
-        DimitStoreSystem dss = dimiter.getStoreSystem();
-        DimitPath dimitPath = dss.getPath(StoreConst.PATH_CONF, dimiter.getDimit().conf().getId());
+        DimitStoreSystem dss = dimiter.storeSystem();
+        DimitPath dimitPath = dss.getPath(StoreConst.PATH_CONF, dimiter.dimit().conf().getId());
 
         ChannelGroupWrapper group = new ChannelGroupWrapper(dimiter);
         group.conf = dimitPath.newPath(cid).<ChannelGroupConf> toStore(ChannelGroupConf.class);
@@ -53,7 +53,7 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
         // create ChannelGroup
         long ct = System.currentTimeMillis();
         ChannelGroup store = ChannelGroup.newBuilder().setId(IDUtil.storeID(MagicFlag.CHANNEL_GROUP)).setCid(cid).setCt(ct).setMt(ct)
-                .setV(Const.V).build();
+                .setV(Const.V).setDimit(dimiter.id()).build();
         group.store = store;
 
         return group;
@@ -73,7 +73,7 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
      * @throws IOException
      */
     public ChannelWrapper newChannel(String cid, ChannelType type) throws IOException {
-        ChannelWrapper channel = ChannelWrapper.init(dimiter, conf().getId(), cid, type);
+        ChannelWrapper channel = ChannelWrapper.init(dimiter, this, cid, type);
         if (channel == null) throw new IOException("Couldn't newChannel:" + cid);
         channel().add(channel);
         return channel;

@@ -46,14 +46,14 @@ public final class DimitStoreConf {
       "elConf\022\t\n\001v\030\001 \001(\r\022\n\n\002id\030\002 \001(\t\022\014\n\004name\030\003 " +
       "\001(\t\022\036\n\006status\030\004 \001(\0162\016.ChannelStatus\022\013\n\003g" +
       "id\030\005 \001(\t\022\013\n\003tps\030\006 \001(\002\022\020\n\010priority\030\007 \001(\005\022" +
-      "\013\n\003tag\030\010 \003(\t\022\n\n\002ct\030\t \001(\004\022\n\n\002mt\030\n \001(\004*\266\001\n" +
+      "\013\n\003tag\030\010 \003(\t\022\n\n\002ct\030\t \001(\004\022\n\n\002mt\030\n \001(\004*\232\001\n" +
       "\tMagicFlag\022\016\n\nDIMIT_CONF\020\000\022\026\n\022CHANNEL_GR" +
       "OUP_CONF\020\001\022\020\n\014CHANNEL_CONF\020\002\022\t\n\005DIMIT\020\003\022" +
-      "\021\n\rCHANNEL_GROUP\020\004\022\013\n\007CHANNEL\020\005\022\025\n\021CHANN" +
-      "EL_SEND_STAT\020\006\022\025\n\021CHANNEL_RECV_STAT\020\007\022\026\n" +
-      "\022CHANNEL_TOTAL_STAT\020\010*B\n\rChannelStatus\022\n" +
-      "\n\006CLOSED\020\000\022\013\n\007PRIMARY\020\001\022\013\n\007STANDBY\020\002\022\013\n\007" +
-      "INVALID\020\003B\024\n\020dimit.store.confP\001b\006proto3"
+      "\021\n\rCHANNEL_GROUP\020\004\022\013\n\007CHANNEL\020\005\022\020\n\014CHANN" +
+      "EL_STAT\020\006\022\026\n\022CHANNEL_TOTAL_STAT\020\007*B\n\rCha" +
+      "nnelStatus\022\n\n\006CLOSED\020\000\022\013\n\007PRIMARY\020\001\022\013\n\007S" +
+      "TANDBY\020\002\022\013\n\007INVALID\020\003B\024\n\020dimit.store.con" +
+      "fP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,8 @@ import dimit.store.conf.DimitConf;
 import dimit.store.sys.DimitPath;
 
 /**
+ * 初始化测试数据
+ * 
  * @author dzh
  * @date Apr 9, 2018 12:17:04 PM
  * @version 0.0.1
@@ -28,12 +29,11 @@ public class TestZkStoreConfDemo {
 
     @BeforeClass
     public static void init() {
-        zkStore = new ZkStoreConfDemo("dimit-zk://yp/dimit?host=127.0.0.1:2181&sleep=1000&retry=3");
+        zkStore = new ZkStoreConfDemo("dimit-zk://dzh/dimit?host=127.0.0.1:2181&sleep=1000&retry=3");
 
     }
 
     @Test
-    @Ignore
     public void createDimitConf() throws IOException {
         DimitPath path = zkStore.createDimitConf("voice", "语音流控");
 
@@ -42,7 +42,6 @@ public class TestZkStoreConfDemo {
     }
 
     @Test
-    @Ignore
     public void createChannelGroupConf() throws IOException {
         DimitPath path = zkStore.createChannelGroupConf("voice", "vcode", "验证码通道组");
 
@@ -52,17 +51,16 @@ public class TestZkStoreConfDemo {
 
     @Test
     public void createChannelConf_1() throws IOException {
-        DimitPath path = zkStore.createChannelConf("voice", "vcode", "21001", "ch1", ChannelStatus.PRIMARY, 100, 2f,
+        DimitPath path = zkStore.createChannelConf("voice", "vcode", "21001", "ch1", ChannelStatus.PRIMARY, 10, 100f,
                 Arrays.asList(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE));
 
         DimitConf dimitConf = path.<DimitConf> toStore(DimitConf.class);
         LOG.info("read dimit {} {}", path, dimitConf);
     }
-    
+
     @Test
-    @Ignore
     public void createChannelConf_2() throws IOException {
-        DimitPath path = zkStore.createChannelConf("voice", "vcode", "21002", "ch2", ChannelStatus.PRIMARY, 80, 8f,
+        DimitPath path = zkStore.createChannelConf("voice", "vcode", "21002", "ch2", ChannelStatus.PRIMARY, 8, 100f,
                 Arrays.asList(DemoConst.TAG_FIXED));
 
         DimitConf dimitConf = path.<DimitConf> toStore(DimitConf.class);
@@ -70,9 +68,8 @@ public class TestZkStoreConfDemo {
     }
 
     @Test
-    @Ignore
     public void createChannelConf_3() throws IOException {
-        DimitPath path = zkStore.createChannelConf("voice", "vcode", "21003", "ch3", ChannelStatus.STANDBY, 80, 8f,
+        DimitPath path = zkStore.createChannelConf("voice", "vcode", "21003", "ch3", ChannelStatus.STANDBY, 8, 100f,
                 Arrays.asList(DemoConst.TAG_MOBILE));
 
         DimitConf dimitConf = path.<DimitConf> toStore(DimitConf.class);
@@ -83,7 +80,9 @@ public class TestZkStoreConfDemo {
     public static void close() {
         try {
             zkStore.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 
 }

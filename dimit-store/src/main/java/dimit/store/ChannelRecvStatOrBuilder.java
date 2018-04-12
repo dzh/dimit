@@ -27,18 +27,18 @@ public interface ChannelRecvStatOrBuilder extends
    * Channel's id
    * </pre>
    *
-   * <code>string channelId = 3;</code>
+   * <code>string channel = 3;</code>
    */
-  java.lang.String getChannelId();
+  java.lang.String getChannel();
   /**
    * <pre>
    * Channel's id
    * </pre>
    *
-   * <code>string channelId = 3;</code>
+   * <code>string channel = 3;</code>
    */
   com.google.protobuf.ByteString
-      getChannelIdBytes();
+      getChannelBytes();
 
   /**
    * <code>uint64 succCount = 4;</code>

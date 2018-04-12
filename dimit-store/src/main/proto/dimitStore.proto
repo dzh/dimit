@@ -41,6 +41,7 @@ message ChannelGroup { // ChannelGroupConf's instance
     uint32 v = 1;
     string id = 2; // instance id
     string cid = 3; // ChannelGroupConf's id
+    string dimit = 6; // Dimit' id
 
     // timestamp
     uint64 ct = 9; // create timestamp
@@ -59,6 +60,7 @@ message Channel { // ChannelConf's instance
     string cid = 3; // ChannelConf's id
     ChannelType type = 4;
     float tps = 5; // max-tps of the channel instance. Default value =
+    string dimit = 6; // Dimit' id
     // float ratio = 8; //TODO
 
     // timestamp
@@ -66,46 +68,49 @@ message Channel { // ChannelConf's instance
     uint64 mt = 10; // modify timestamp
 }
 
-message ChannelSendStat {
+message ChannelStat {
+    // basic
     uint32 v = 1;
-    string id = 2;
-    string channelId = 3;
-    uint64 succCount = 4;
-    uint64 succTime = 5; // millisecond
-    uint64 failCount = 6;
-    uint64 failTime = 7;
-    double tps = 8;
+    string id = 2;          // id
+    string channel = 3;     // channel's id
+    
+    // accumulative
+    uint64 count = 4;       // total call count
+    uint64 time = 5;        // total call millisecond
+    uint64 succCount = 6;
+    uint64 succTime = 7;
+    
+    // interval mean
+    double tps = 8;          // 
+    double avgTime = 11;     // average calling millisecond
+    double succRate = 12;    
 
     // timestamp
     uint64 ct = 9; // create timestamp
     uint64 mt = 10; // modify timestamp
 }
 
-message ChannelRecvStat {
-    uint32 v = 1;
-    string id = 2;
-    string channelId = 3; // Channel's id
-    uint64 succCount = 4;
-    uint64 failCount = 5;
-    double tps = 8;
-
-    // timestamp
-    uint64 ct = 9; // create timestamp
-    uint64 mt = 10; // modify timestamp
-}
 
 message ChannelTotalStat {
     uint32 v = 1;
-    string cid = 2; // ChannelConf's id
-    uint64 sendSuccCount = 3;
-    uint64 sendFailCount = 4;
-    uint64 sendSuccTime = 5; //  millisecond
-    uint64 sendFailTime = 6;
-    uint64 recvSuccCount = 7;
-    uint64 recvFailCount = 8;
-    uint64 sendRecvTime = 12; //total(ms = back - send)
+    string id = 2;
+    string cid = 3;         // ChannelConf's id
+        
+    // accumulative
+    uint64 count = 4;       // total send count
+    uint64 time = 5;        // total send millisecond
+    uint64 succCount = 6;
+    uint64 succTime = 7;
+    
+    // interval mean
+    double tps = 8;          // 
+    double avgTime = 11;     // average calling millisecond
+    double succRate = 12;    
+    
+    // uint64 sendRecvTime = 12; //total(ms = back - send)
 
     // timestamp
     uint64 ct = 9; // create timestamp
     uint64 mt = 10; // modify timestamp
+
 }

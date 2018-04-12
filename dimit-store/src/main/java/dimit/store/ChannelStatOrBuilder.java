@@ -3,20 +3,32 @@
 
 package dimit.store;
 
-public interface ChannelTotalStatOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:ChannelTotalStat)
+public interface ChannelStatOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:ChannelStat)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <pre>
+   * basic
+   * </pre>
+   *
    * <code>uint32 v = 1;</code>
    */
   int getV();
 
   /**
+   * <pre>
+   * id
+   * </pre>
+   *
    * <code>string id = 2;</code>
    */
   java.lang.String getId();
   /**
+   * <pre>
+   * id
+   * </pre>
+   *
    * <code>string id = 2;</code>
    */
   com.google.protobuf.ByteString
@@ -24,21 +36,21 @@ public interface ChannelTotalStatOrBuilder extends
 
   /**
    * <pre>
-   * ChannelConf's id
+   * channel's id
    * </pre>
    *
-   * <code>string cid = 3;</code>
+   * <code>string channel = 3;</code>
    */
-  java.lang.String getCid();
+  java.lang.String getChannel();
   /**
    * <pre>
-   * ChannelConf's id
+   * channel's id
    * </pre>
    *
-   * <code>string cid = 3;</code>
+   * <code>string channel = 3;</code>
    */
   com.google.protobuf.ByteString
-      getCidBytes();
+      getChannelBytes();
 
   /**
    * <pre>
@@ -51,7 +63,7 @@ public interface ChannelTotalStatOrBuilder extends
 
   /**
    * <pre>
-   * total send millisecond
+   * total call millisecond
    * </pre>
    *
    * <code>uint64 time = 5;</code>

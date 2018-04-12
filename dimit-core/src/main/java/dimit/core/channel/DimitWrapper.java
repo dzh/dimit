@@ -49,7 +49,7 @@ public class DimitWrapper implements StoreWrapper<Dimit, DimitConf> {
 
     public static DimitWrapper init(Dimiter dimiter, String cid) throws IOException {
         // find DimitConf, under conf/DimitConf
-        DimitStoreSystem dss = dimiter.getStoreSystem();
+        DimitStoreSystem dss = dimiter.storeSystem();
         DimitPath pathConf = dss.getPath(StoreConst.PATH_CONF);
         DimitWrapper dimit = new DimitWrapper(dimiter);
 

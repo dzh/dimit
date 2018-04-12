@@ -23,14 +23,22 @@ public interface ChannelSendStatOrBuilder extends
       getIdBytes();
 
   /**
-   * <code>string channelId = 3;</code>
+   * <pre>
+   *channel's id
+   * </pre>
+   *
+   * <code>string channel = 3;</code>
    */
-  java.lang.String getChannelId();
+  java.lang.String getChannel();
   /**
-   * <code>string channelId = 3;</code>
+   * <pre>
+   *channel's id
+   * </pre>
+   *
+   * <code>string channel = 3;</code>
    */
   com.google.protobuf.ByteString
-      getChannelIdBytes();
+      getChannelBytes();
 
   /**
    * <code>uint64 succCount = 4;</code>
