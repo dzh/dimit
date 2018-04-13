@@ -64,11 +64,9 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
     }
 
     /**
-     * 
-     * @param gid
-     *            ChannelGroupConf's id
      * @param cid
      *            ChannelConf's id
+     * @param type
      * @return
      * @throws IOException
      */
