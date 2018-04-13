@@ -11,8 +11,9 @@ import java.util.concurrent.Callable;
  */
 public interface ChannelCallable<V> extends Callable<V> {
 
-    int CODE_FATAL = -1; // 严重的错误,通道直接
+    int CODE_FATAL = -1; // 严重的错误,通道状态设置为Invalid
     int CODE_SUCC = 0;
+    int CODE_FAIL = 1; // 普通的错误
 
     /**
      * @param v

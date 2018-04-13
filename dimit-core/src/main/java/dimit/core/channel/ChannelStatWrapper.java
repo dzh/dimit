@@ -129,7 +129,7 @@ public class ChannelStatWrapper extends StatWrapper<ChannelStat> {
 
     /**
      * NotThreadSafe
-     * 
+     *
      */
     public void snapshot() {
         long ct = System.currentTimeMillis();
@@ -157,7 +157,7 @@ public class ChannelStatWrapper extends StatWrapper<ChannelStat> {
             DimitPath statPath = dss.getPath(StoreConst.PATH_STORE, channel.conf().getId(), "stat" + channel.store().getType().getNumber(),
                     channel.id());
             dss.<ChannelStat> io().write(statPath, stat, StoreAttribute.EPHEMERAL);
-            LOG.info("create EPHEMERAL stat {}", statPath);
+            LOG.info("create EPHEMERAL stat {} {}", statPath, stat);
         }
     }
 
@@ -165,7 +165,7 @@ public class ChannelStatWrapper extends StatWrapper<ChannelStat> {
      * double tps = 8;
      * double avgTime = 11;
      * double succRate = 12;
-     * 
+     *
      * @param preStat
      * @param stat
      */
@@ -215,7 +215,7 @@ public class ChannelStatWrapper extends StatWrapper<ChannelStat> {
 
     /**
      * for test
-     * 
+     *
      * @return
      */
     @Deprecated

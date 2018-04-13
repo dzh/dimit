@@ -145,7 +145,7 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
                 stat.incrCount();
                 stat.addTime(interval);
 
-                switch (c.code(v)) { // TODO
+                switch (c.code(v)) {
                 case ChannelCallable.CODE_SUCC: {
                     stat.incrSuccCount();
                     stat.addSuccTime(interval);
@@ -153,7 +153,7 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
                 }
                 case ChannelCallable.CODE_FATAL: {
                     invalid();
-                    throw new InvalidChannelException("Invalid ChannelConf:" + conf.getId() + ", code:-1");
+                    throw new InvalidChannelException("Invalid ChannelConf:" + conf.getId() + " code:" + ChannelCallable.CODE_FATAL);
                 }
                 }
             }

@@ -33,11 +33,11 @@ class ChannelStatWorker implements Closeable {
     private String name;
 
     ChannelStatWorker() {
-        this("ChannelStatWorker", 1000L, 3000L);
+        this(1000L, 3000L);
     }
 
     ChannelStatWorker(long snapshotMs, long syncMs) {
-        this("ChannelStatWorker", snapshotMs, syncMs);
+        this(ChannelStatWorker.class.getSimpleName(), snapshotMs, syncMs);
     }
 
     ChannelStatWorker(String name, long snapshotMs, long syncMs) {
@@ -56,7 +56,7 @@ class ChannelStatWorker implements Closeable {
     }
 
     public void start() {
-        LOG.info("{} start {}ms {}ms ", name, snapshotMs, syncMs);
+        LOG.info("{} start snapshot-{} sync-{}", name, snapshotMs, syncMs);
         SnapshotThread snapshotT = new SnapshotThread(name);
         snapshotT.start();
 

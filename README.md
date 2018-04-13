@@ -3,7 +3,7 @@ dimit
 分布式流控系统
 
 ## 快速开始
-- pom依赖
+- [maven](http://search.maven.org/#search%7Cga%7C1%7Cdimit)加pom依赖
 
 ```xml
     <dependencies>
@@ -97,8 +97,5 @@ dimiter.close();
 - [工程源码](doc/dimit_project.md)
 - [数据模型](doc/dimit_store.md)
 - [配置说明](doc/dimit_conf.md)
-- [版本记录](doc/release_note.md)
+- [发布记录](doc/release_note.md)
 
-## TODO
-- Web管理
-- 通道自动恢复

@@ -19,7 +19,7 @@ DimitStoreSystem
 
 
 ## 存储结构
-- 示例说明 dimit-zk://domain/path
+- 示例说明 URI: `dimit-zk://domain/path`
 
 ```
 /path
@@ -28,7 +28,7 @@ DimitStoreSystem
             DimitConf_N             // 分流器定义
                 ChannelGroupConf_N  // 通道组定义
                     ChannelConf_N   // 通道配置
-        store       //运行时信息
+        store       // 运行时信息
             DimitConf_N_ID          // DimitConf_N的ID 读取Dimiter所在机器的基本服务器信息
                 Dimit_ID            // Dimit实例，临时节点
             ChannelConf_N_ID        // ChannelConf_N的ID
@@ -43,7 +43,7 @@ DimitStoreSystem
 ```
 
 - 运行时更新
-    - 不可用状态的通道不在更新统计信息 stat_0 stat_1 stat
+    - 不可用状态的通道不会更新统计信息 stat_0 stat_1
 
 
 
