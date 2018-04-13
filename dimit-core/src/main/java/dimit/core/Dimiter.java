@@ -66,9 +66,9 @@ public class Dimiter implements Closeable {
             statEnable = Boolean.parseBoolean(String.valueOf(env(StoreConst.P_STAT_ENABLE, "true")));
             LOG.info("statEnable {}", statEnable);
             if (statEnable) {
-                int workCount = Integer.parseInt(String.valueOf(env(StoreConst.P_STAT_WORKER_COUNT, "1"))); // TODO
-                long snapshotMs = Long.parseLong(String.valueOf(env(StoreConst.P_STAT_WORKER_SNAPSHOT_INTERVAL, "1000")));
-                long syncMs = Long.parseLong(String.valueOf(env(StoreConst.P_STAT_WORKER_SYNC_INTERVAL, "5000")));
+                int workCount = Integer.parseInt(String.valueOf(env(StoreConst.P_STAT_WORKER_COUNT, "1")));
+                long snapshotMs = Long.parseLong(String.valueOf(env(StoreConst.P_STAT_WORKER_SNAPSHOT_INTERVAL, "-1")));
+                long syncMs = Long.parseLong(String.valueOf(env(StoreConst.P_STAT_WORKER_SYNC_INTERVAL, "-1")));
                 workers = new ChannelStatWorker[workCount];
                 for (int i = 0; i < workCount; ++i) {
                     workers[i] = new ChannelStatWorker("ChannelStatWorker-" + i, snapshotMs, syncMs);

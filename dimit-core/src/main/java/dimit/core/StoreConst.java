@@ -17,8 +17,8 @@ public interface StoreConst {
     // String P_STAT_DYNAMIC = "stat.dynamic"; // true
     String P_STAT_ENABLE = "stat.enable";   // true
     String P_STAT_WORKER_COUNT = "stat.worker.count"; // 1
-    String P_STAT_WORKER_SNAPSHOT_INTERVAL = "stat.worker.snapshot.interval"; // 1000 ms
-    String P_STAT_WORKER_SYNC_INTERVAL = "stat.worker.sync.interval"; // 5000 ms
+    String P_STAT_WORKER_SNAPSHOT_INTERVAL = "stat.worker.snapshot.interval"; // ms
+    String P_STAT_WORKER_SYNC_INTERVAL = "stat.worker.sync.interval"; // ms
 
     //
     String P_STAT_THRESHOLD_SUCC_RATE = "stat.threshold.succ.rate";
@@ -26,5 +26,8 @@ public interface StoreConst {
 
     int MAX_PRIORITY = 10;
     int MIN_PRIORITY = 0;
+
+    long SNAPSHOT_INTERVAL = 1000; // 1s
+    long SYNC_INTERVAL = 10000; // 10s
 
 }

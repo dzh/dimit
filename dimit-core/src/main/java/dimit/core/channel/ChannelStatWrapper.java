@@ -112,15 +112,17 @@ public class ChannelStatWrapper extends StatWrapper<ChannelStat> {
                 if (avgTime > 1000) priority -= 1;
                 if (avgTime > 3000) priority -= 2;
                 if (avgTime > 5000) priority -= 6;
-            }
 
-            double succRate = stat.getSuccRate();
-            if (succRate > 0) {
-                succRate *= 100;
-                if (succRate < 90) priority -= 1;
-                if (succRate < 70) priority -= 1;
-                if (succRate < 50) priority -= 2;
-                if (succRate < 30) priority -= 6;
+                double succRate = stat.getSuccRate();
+                if (succRate > 0) {
+                    succRate *= 100;
+                    if (succRate < 90) priority -= 1;
+                    if (succRate < 70) priority -= 1;
+                    if (succRate < 50) priority -= 2;
+                    if (succRate < 30) priority -= 2;
+                } else if (succRate == 0) {
+                    priority -= StoreConst.MAX_PRIORITY;
+                }
             }
         }
         LOG.debug("calcPriority {} {}", channel.id(), priority);
@@ -175,16 +177,16 @@ public class ChannelStatWrapper extends StatWrapper<ChannelStat> {
         long intervalMs = stat.getCt() - preStat.getCt();
         long intervalCount = stat.getCount() - preStat.getCount();
 
-        // IntervalMean
-        double tps = intervalCount / (intervalMs / 1000.0);
-
         double avgTime = -1;
+        double succRate = -1;
+        double tps = -1;
+
+        // IntervalMean
+        if (intervalMs > 0) tps = intervalCount / (intervalMs / 1000.0);
+
         if (intervalCount > 0) {
             avgTime = (stat.getTime() - preStat.getTime()) * 1.0 / intervalCount;
-        }
 
-        double succRate = -1;
-        if (stat.getSuccCount() > 0) {
             succRate = (stat.getSuccCount() - preStat.getSuccCount()) * 1.0 / intervalCount;
         }
 

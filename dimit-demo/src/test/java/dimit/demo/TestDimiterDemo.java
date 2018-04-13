@@ -237,7 +237,7 @@ public class TestDimiterDemo {
                                 @Override
                                 public Object call() throws Exception {
                                     LOG.debug("exec {}", execCount.incrementAndGet());
-                                    Thread.sleep(100);
+                                    // Thread.sleep(100);
                                     latch.countDown();
                                     return null;
                                 }

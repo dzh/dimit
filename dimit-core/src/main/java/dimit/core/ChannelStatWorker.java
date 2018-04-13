@@ -27,8 +27,8 @@ class ChannelStatWorker implements Closeable {
 
     private volatile boolean closed = false;
 
-    private long snapshotMs = 1000L;
-    private long syncMs = 3000L;
+    private long snapshotMs;
+    private long syncMs;
 
     private String name;
 
@@ -44,8 +44,8 @@ class ChannelStatWorker implements Closeable {
         this.name = name;
         this.channels = Collections.synchronizedList(new LinkedList<ChannelWrapper>());
 
-        if (snapshotMs <= 0) snapshotMs = 1000L; // default
-        if (syncMs <= 0) syncMs = 3000L;
+        if (snapshotMs <= 0) snapshotMs = StoreConst.SNAPSHOT_INTERVAL;
+        if (syncMs <= 0) syncMs = StoreConst.SYNC_INTERVAL;
 
         this.snapshotMs = snapshotMs;
         this.syncMs = syncMs;

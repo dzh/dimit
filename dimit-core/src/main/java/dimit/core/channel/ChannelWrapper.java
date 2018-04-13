@@ -108,6 +108,7 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
      * @return
      * @throws Exception
      */
+    @Deprecated
     public <V> V call(Callable<V> c) throws Exception {
         if (!limiter.tryAcquire()) { throw new RateLimiterException("out of tps:" + limiter.getRate()); }
 
@@ -116,8 +117,13 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
             return c.call();
         } finally {
             if (stat != null) {
+                long interval = System.currentTimeMillis() - st;
+
                 stat.incrCount();
-                stat.addTime(System.currentTimeMillis() - st);
+                stat.addTime(interval);
+
+                stat.incrSuccCount(); // 都记成成功,这样能区别都失败的情况
+                stat.addSuccTime(interval);
             }
         }
     }
