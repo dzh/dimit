@@ -189,7 +189,19 @@
 		<url>https://github.com/dzh/dimit/issues</url>
 		<system>GitHub Issue Management</system>
 	</issueManagement>
-	<description>The Distributed Traffic Control Framework</description>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>dzh</name>
+            <email>dzh_11@qq.com</email>
+        </developer>
+    </developers>
+	<description>The Distributed Traffic Control System</description>
 	<modules>
 		<module>dimit-core</module>
 		<module>dimit-admin</module>
