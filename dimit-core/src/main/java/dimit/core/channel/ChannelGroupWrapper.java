@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import dimit.core.Dimiter;
 import dimit.core.StoreConst;
 import dimit.store.ChannelGroup;
@@ -28,6 +31,8 @@ import dimit.store.util.IDUtil;
  */
 public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGroupConf> {
 
+    static Logger LOG = LoggerFactory.getLogger(ChannelGroupWrapper.class);
+
     private List<ChannelWrapper> channel;
     private ChannelGroupConf conf;
     private ChannelGroup store;
@@ -38,7 +43,18 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
     private ChannelGroupWrapper(Dimiter dimiter) {
         this.dimiter = dimiter;
         channel = Collections.synchronizedList(new LinkedList<ChannelWrapper>());
-        selector = new SortableChannelSelector(this);
+        try {
+            selector = createSelector(this);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            selector = new SimpleChannelSelector(this);
+        }
+        LOG.info("ChannelSelector is {}", selector.getClass().getName());
+    }
+
+    protected ChannelSelector createSelector(ChannelGroupWrapper group) throws Exception {
+        String selector = String.valueOf(group.dimiter().env(StoreConst.P_CHANNEL_SELECTOR, SimpleChannelSelector.class.getName()));
+        return (ChannelSelector) Class.forName(selector).getConstructor(ChannelGroupWrapper.class).newInstance(group);
     }
 
     public static final ChannelGroupWrapper init(Dimiter dimiter, String cid) throws IOException {
@@ -64,11 +80,9 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
     }
 
     /**
-     * 
-     * @param gid
-     *            ChannelGroupConf's id
      * @param cid
      *            ChannelConf's id
+     * @param type
      * @return
      * @throws IOException
      */

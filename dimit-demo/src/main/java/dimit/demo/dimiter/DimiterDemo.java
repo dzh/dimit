@@ -3,6 +3,7 @@ package dimit.demo.dimiter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,9 @@ public class DimiterDemo implements Closeable {
 
     private Dimiter dimiter;
 
-    public DimiterDemo(String uri, String dimitConfId) {
+    public DimiterDemo(String uri, Map<String, Object> env, String dimitConfId) {
         try {
-            dimiter = Dimiter.newDimiter(URI.create(uri), null, dimitConfId);
+            dimiter = Dimiter.newDimiter(URI.create(uri), env, dimitConfId);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }

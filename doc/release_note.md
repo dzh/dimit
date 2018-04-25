@@ -1,14 +1,19 @@
 发布记录
 ==========================
 
+## v0.0.3 TODO 2018-
+- 新增`channel.selector` 自定义ChannelSelector
 
-## v0.0.2 2018-xx-xx TODO
+TODO
 - Web管理功能 dimit-admin
 - 编辑doc/dimit_conf.md配置参数说明
 - 自定义切换策略
 - 增加Channel从Invalid状态恢复的自动机制
 - Dimiter的Master选举机制, 清理store、ChannelTotalStat统计等
 
+
+## v0.0.2 2018-04-13
+- fix rm priority() > StoreConst.MIN_PRIORITY in isValid()
 
 ## v0.0.1 2018-04-13
 - 流量控制

@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * <pre>
  * e.g. how to use {@link ChannelSelector}
- * List<ChannelWrapper> channels = selector.select(...); // tags
+ * List&lt;ChannelWrapper&gt; channels = selector.select(...); // tags
  * V result = null;
  * for(ChannelWrapper channel : channels) {
  *     try{
- *         result = channel.call(new Callable<V>{
+ *         result = channel.call(new Callable&lt;V&gt;{
  *             // TODO request
  *             
  *         });
