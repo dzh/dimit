@@ -310,7 +310,8 @@ public class ChannelWrapper implements StoreWrapper<Channel, ChannelConf> {
         if (conf.getStatus().equals(ChannelStatus.CLOSED) || conf.getStatus().equals(ChannelStatus.INVALID)) return false;
 
         // ChannelType
-        return store.getType() == ChannelType.SEND ? (tps() > 0 && priority() > StoreConst.MIN_PRIORITY) : true;
+        return store.getType() == ChannelType.SEND ? tps() > 0 : true;
+        // return store.getType() == ChannelType.SEND ? (tps() > 0 && priority() > StoreConst.MIN_PRIORITY) : true;
     }
 
     public int priority() { // TODO priority cache

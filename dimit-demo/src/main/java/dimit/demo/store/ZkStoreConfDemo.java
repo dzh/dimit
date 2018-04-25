@@ -19,7 +19,7 @@ import dimit.store.sys.DimitStores;
 import dimit.store.sys.StoreAttribute;
 
 /**
- * 示例操作dimit相关zk里的配置, 详见{@link TestZkStoreConfDemo}
+ * 示例操作dimit相关zk里的配置, 详见TestZkStoreConfDemo
  * 
  * @author dzh
  * @date Apr 9, 2018 11:11:10 AM

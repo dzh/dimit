@@ -26,7 +26,7 @@ public class DimitPath implements Watchable {
     private String path;
 
     /**
-     * @param dfs
+     * @param dss
      * @param path
      *            absolute path(e.g. /RootPath/a/b/c) or relative path (e.g. a/b/c)
      * @throws IllegalArgumentException
@@ -95,7 +95,7 @@ public class DimitPath implements Watchable {
     }
 
     /**
-     * a/b/c -> c
+     * a/b/c -&gt; c
      * 
      * @return last segment string
      */
@@ -115,7 +115,7 @@ public class DimitPath implements Watchable {
     }
 
     /**
-     * a/b/c -> a/b
+     * a/b/c -&gt; a/b
      * 
      * @return
      */

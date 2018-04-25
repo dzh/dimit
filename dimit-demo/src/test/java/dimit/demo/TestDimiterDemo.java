@@ -1,7 +1,9 @@
 package dimit.demo;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -18,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dimit.core.Dimiter;
+import dimit.core.StoreConst;
 import dimit.core.channel.ChannelCallable;
 import dimit.core.channel.ChannelGroupWrapper;
 import dimit.core.channel.ChannelWrapper;
@@ -44,7 +47,10 @@ public class TestDimiterDemo {
     @BeforeClass
     public static void init() {
         try {
-            demo = new DimiterDemo("dimit-zk://dzh/dimit?host=127.0.0.1:2181&sleep=1000&retry=3", "voice");
+            Map<String, Object> env = new HashMap<>();
+            env.put(StoreConst.P_CHANNEL_SELECTOR, "");
+
+            demo = new DimiterDemo("dimit-zk://dzh/dimit?host=127.0.0.1:2181&sleep=1000&retry=3", env, "voice");
             // 初始化通道组
             group = demo.initChannelGroup("vcode");
             // 初始化需要的通道
@@ -54,6 +60,11 @@ public class TestDimiterDemo {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
+    }
+
+    @Test
+    public void testChannelSelector() {
+        LOG.info("ChannelSelector is {}", group.selector().getClass());
     }
 
     @Test
@@ -165,6 +176,7 @@ public class TestDimiterDemo {
             float oldTps = 2.0f;
             while (true) {
                 es.submit(new Runnable() {
+                    @SuppressWarnings("deprecation")
                     @Override
                     public void run() {
                         try {
@@ -217,6 +229,7 @@ public class TestDimiterDemo {
     }
 
     @Test
+    @Ignore
     public void testChannelStat() throws Exception {
         ExecutorService es = Executors.newFixedThreadPool(2);
 

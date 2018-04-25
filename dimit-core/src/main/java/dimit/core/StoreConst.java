@@ -24,6 +24,8 @@ public interface StoreConst {
     String P_STAT_THRESHOLD_SUCC_RATE = "stat.threshold.succ.rate";
     String P_STAT_THRESHOLD_AVG_TIME = "stat.threshold.avg.time";
 
+    String P_CHANNEL_SELECTOR = "channel.selector"; // dimit.core.channel.SimpleChannelSelector
+
     int MAX_PRIORITY = 10;
     int MIN_PRIORITY = 0;
 

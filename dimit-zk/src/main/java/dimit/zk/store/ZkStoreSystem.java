@@ -44,7 +44,7 @@ public class ZkStoreSystem extends DimitStoreSystem {
     }
 
     /**
-     * uri: dimit-zk://domain/path?host=connectString&retry=3&sleep=2000
+     * uri: dimit-zk://domain/path?host=connectString&amp;retry=3&amp;sleep=2000
      */
     @Override
     protected boolean connect(URI uri) throws IOException {
