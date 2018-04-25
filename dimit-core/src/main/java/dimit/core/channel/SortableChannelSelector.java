@@ -12,7 +12,7 @@ import java.util.TreeSet;
 /**
  * select channel for channel group with the specified order.
  *
- * This selector will exclude the channel which is marked with limitTags then sort other channels
+ * This selector will exclude the channel which is not marked with hitTags then sort other channels
  * with tag in sortTags.The sort order will be same as the declare order in sortTags.If channels
  * were marked with same sortTags,the selector will use the default order strategy.
  *
@@ -33,12 +33,12 @@ public class SortableChannelSelector extends ChannelSelector {
 
   /**
    * @param type which type should be selected
-   * @param limitTag exclude channels with limit tag
+   * @param hitTag exclude channels with limit tag
    * @param sortTag order channels by sortTags
    * @return ordered channelWrapper list
    */
   @Override
-  List<ChannelWrapper> select(ChannelType type, String[] limitTag, String[] sortTag) {
+  List<ChannelWrapper> select(ChannelType type, String[] hitTag, String[] sortTag) {
     TreeSet<ChannelWrapper> filtered = new TreeSet<>(new SortTagsComparator(sortTag));
     List<ChannelWrapper> chans = group().channel();
     for (ChannelWrapper channel : chans) {
@@ -48,7 +48,7 @@ public class SortableChannelSelector extends ChannelSelector {
       if (!channel.isValid())
         continue;
 
-      if (!channel.cantainTags(limitTag))
+      if (!channel.cantainTags(hitTag))
         continue;
 
       filtered.add(channel);
