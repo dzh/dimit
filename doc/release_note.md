@@ -1,7 +1,10 @@
 发布记录
 ==========================
 
-## v0.0.3 TODO 2018-
+## v0.0.4 2018-04-25
+- 新增`dimit.core.channel.SortableChannelSelector` 可以在选择通道时支持排序
+
+## v0.0.3  2018-
 - 新增`channel.selector` 自定义ChannelSelector
 
 TODO
