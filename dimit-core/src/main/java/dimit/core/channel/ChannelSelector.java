@@ -51,11 +51,11 @@ public abstract class ChannelSelector implements Closeable {
 
     abstract List<ChannelWrapper> select(ChannelType type, String... tags);
 
-    public List<ChannelWrapper> select(String[] limitTag,String[] sortTag){
-        return select(ChannelType.SEND,limitTag,sortTag);
+        public List<ChannelWrapper> select(String[] hitTag,String[] sortTag){
+        return select(ChannelType.SEND,hitTag,sortTag);
     }
 
-    abstract List<ChannelWrapper> select(ChannelType type,String[] limitTag,String[] sortTag);
+    abstract List<ChannelWrapper> select(ChannelType type,String[] hitTag,String[] sortTag);
 
     public ChannelGroupWrapper group() {
         return this.group;
