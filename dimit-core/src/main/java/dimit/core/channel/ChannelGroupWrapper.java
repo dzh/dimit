@@ -38,7 +38,7 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
     private ChannelGroupWrapper(Dimiter dimiter) {
         this.dimiter = dimiter;
         channel = Collections.synchronizedList(new LinkedList<ChannelWrapper>());
-        selector = new SimpleChannelSelector(this);
+        selector = new SortableChannelSelector(this);
     }
 
     public static final ChannelGroupWrapper init(Dimiter dimiter, String cid) throws IOException {

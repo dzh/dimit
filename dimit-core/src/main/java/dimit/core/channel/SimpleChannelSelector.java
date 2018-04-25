@@ -1,17 +1,16 @@
 package dimit.core.channel;
 
+import dimit.store.ChannelType;
+import dimit.store.conf.ChannelStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import dimit.store.ChannelType;
-import dimit.store.conf.ChannelStatus;
 
 /**
  * @author dzh
@@ -67,6 +66,11 @@ public class SimpleChannelSelector extends ChannelSelector {
         }
 
         return selected;
+    }
+
+    @Override
+    List<ChannelWrapper> select(ChannelType type, String[] limitTag, String[] sortTag) {
+        return select(type,limitTag);
     }
 
     class PriorityComparator implements Comparator<ChannelWrapper> {

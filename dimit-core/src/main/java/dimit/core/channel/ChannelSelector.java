@@ -3,10 +3,10 @@
  */
 package dimit.core.channel;
 
+import dimit.store.ChannelType;
+
 import java.io.Closeable;
 import java.util.List;
-
-import dimit.store.ChannelType;
 
 /**
  * <pre>
@@ -50,6 +50,12 @@ public abstract class ChannelSelector implements Closeable {
     }
 
     abstract List<ChannelWrapper> select(ChannelType type, String... tags);
+
+    public List<ChannelWrapper> select(String[] limitTag,String[] sortTag){
+        return select(ChannelType.SEND,limitTag,sortTag);
+    }
+
+    abstract List<ChannelWrapper> select(ChannelType type,String[] limitTag,String[] sortTag);
 
     public ChannelGroupWrapper group() {
         return this.group;
