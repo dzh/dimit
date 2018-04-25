@@ -1,5 +1,24 @@
 package dimit.demo;
 
+import dimit.core.Dimiter;
+import dimit.core.StoreConst;
+import dimit.core.channel.ChannelCallable;
+import dimit.core.channel.ChannelGroupWrapper;
+import dimit.core.channel.ChannelWrapper;
+import dimit.core.channel.SortableChannelSelector;
+import dimit.demo.dimiter.DimiterDemo;
+import dimit.demo.store.TestZkStoreConfDemo;
+import dimit.store.ChannelType;
+import dimit.store.conf.ChannelConf;
+import dimit.store.conf.ChannelStatus;
+import dimit.store.sys.DimitPath;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -11,25 +30,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import dimit.core.Dimiter;
-import dimit.core.StoreConst;
-import dimit.core.channel.ChannelCallable;
-import dimit.core.channel.ChannelGroupWrapper;
-import dimit.core.channel.ChannelWrapper;
-import dimit.demo.dimiter.DimiterDemo;
-import dimit.demo.store.TestZkStoreConfDemo;
-import dimit.store.ChannelType;
-import dimit.store.conf.ChannelConf;
-import dimit.store.conf.ChannelStatus;
-import dimit.store.sys.DimitPath;
 
 /**
  * @author dzh
@@ -48,7 +48,7 @@ public class TestDimiterDemo {
     public static void init() {
         try {
             Map<String, Object> env = new HashMap<>();
-            env.put(StoreConst.P_CHANNEL_SELECTOR, "");
+            env.put(StoreConst.P_CHANNEL_SELECTOR, SortableChannelSelector.class.getName());
 
             demo = new DimiterDemo("dimit-zk://dzh/dimit?host=127.0.0.1:2181&sleep=1000&retry=3", env, "voice");
             // 初始化通道组
@@ -92,6 +92,11 @@ public class TestDimiterDemo {
         // LOG.info("select only fixed {}", selected); // 21002 21001
         selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_MOBILE);
         LOG.info("select only mobile {}", selected); // 21001 21003
+
+        selected  = demo.dimiter().dimit().group(group.id()).selector().select(
+          new String[]{DemoConst.TAG_MOBILE},new String[]{DemoConst.TAG_ONLY_CMCC}
+        );
+        LOG.info("select with sort[tag:{}] {}",DemoConst.TAG_ONLY_CMCC,selected);
 
         // invalid 21001
         DimitPath path21001 = demo.dimiter().storeSystem().getPath("conf", "voice", "vcode", "21001");
