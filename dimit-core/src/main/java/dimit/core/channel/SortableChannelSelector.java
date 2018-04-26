@@ -26,19 +26,13 @@ public class SortableChannelSelector extends ChannelSelector {
     super(group);
   }
 
-  @Override
-  List<ChannelWrapper> select(ChannelType type, String... tags) {
-    return select(type, tags, null);
-  }
 
-  /**
-   * @param type which type should be selected
-   * @param hitTag exclude channels with limit tag
-   * @param sortTag order channels by sortTags
-   * @return ordered channelWrapper list
-   */
   @Override
-  List<ChannelWrapper> select(ChannelType type, String[] hitTag, String[] sortTag) {
+  public List<ChannelWrapper> select(ChannelSelectQuery query) {
+    ChannelType type = query.getChannelType();
+    String[] tags = query.buildQuery();
+    String[] hitTag = tags[0].split(",");
+    String[] sortTag = tags[1].split(",");
     TreeSet<ChannelWrapper> filtered = new TreeSet<>(new SortTagsComparator(sortTag));
     List<ChannelWrapper> chans = group().channel();
     for (ChannelWrapper channel : chans) {
