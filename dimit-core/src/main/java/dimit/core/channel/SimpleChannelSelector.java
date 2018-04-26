@@ -35,7 +35,9 @@ public class SimpleChannelSelector extends ChannelSelector {
     }
 
     @Override
-    List<ChannelWrapper> select(ChannelType type, String... tags) {
+    public List<ChannelWrapper> select(ChannelSelectQuery query) {
+        ChannelType type = query.getChannelType();
+        String[] tags = query.buildQuery();
         TreeSet<ChannelWrapper> primary = new TreeSet<>(new PriorityComparator());
         TreeSet<ChannelWrapper> standby = new TreeSet<>(new PriorityComparator());
 
@@ -68,10 +70,6 @@ public class SimpleChannelSelector extends ChannelSelector {
         return selected;
     }
 
-    @Override
-    List<ChannelWrapper> select(ChannelType type, String[] limitTag, String[] sortTag) {
-        return select(type,limitTag);
-    }
 
     class PriorityComparator implements Comparator<ChannelWrapper> {
 

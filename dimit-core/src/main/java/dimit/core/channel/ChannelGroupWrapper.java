@@ -74,13 +74,10 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
         return group;
     }
 
-    public List<ChannelWrapper> select(String... tags) {
-        return selector.select(tags);
+    public List<ChannelWrapper> select(ChannelSelectQuery query) {
+        return selector.select(query);
     }
 
-    public List<ChannelWrapper> select(String[] limitTags,String[] sortTags) {
-        return selector.select(limitTags,sortTags);
-    }
 
     /**
      * @param cid
