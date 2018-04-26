@@ -5,6 +5,7 @@ import dimit.core.StoreConst;
 import dimit.core.channel.ChannelCallable;
 import dimit.core.channel.ChannelGroupWrapper;
 import dimit.core.channel.ChannelWrapper;
+import dimit.core.channel.SortableChannelQuery;
 import dimit.core.channel.SortableChannelSelector;
 import dimit.demo.dimiter.DimiterDemo;
 import dimit.demo.store.TestZkStoreConfDemo;
@@ -82,7 +83,7 @@ public class TestDimiterDemo {
      * @throws InterruptedException
      */
     @Test
-    @Ignore
+//    @Ignore
     public void testSelectChannel() throws IOException, InterruptedException {
         // select channel
         List<ChannelWrapper> selected = null;
@@ -90,12 +91,13 @@ public class TestDimiterDemo {
         // LOG.info("select fixed and mobile {}", selected); // 21001
         // selected = demo.dimiter().getDimit().group(group.id()).select(DemoConst.TAG_FIXED);
         // LOG.info("select only fixed {}", selected); // 21002 21001
-        selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_MOBILE);
+        SortableChannelQuery query = SortableChannelQuery.newQuery().hits(DemoConst
+          .TAG_FIXED_CALLER);
+        selected = demo.dimiter().dimit().group(group.id()).select(query);
         LOG.info("select only mobile {}", selected); // 21001 21003
 
-        selected  = demo.dimiter().dimit().group(group.id()).selector().select(
-          new String[]{DemoConst.TAG_MOBILE},new String[]{DemoConst.TAG_ONLY_CMCC}
-        );
+        query.hits(DemoConst.TAG_MOBILE).sort(DemoConst.TAG_ONLY_CMCC);
+        selected  = demo.dimiter().dimit().group(group.id()).selector().select(query);
         LOG.info("select with sort[tag:{}] {}",DemoConst.TAG_ONLY_CMCC,selected);
 
         // invalid 21001
@@ -108,7 +110,8 @@ public class TestDimiterDemo {
         Thread.sleep(1000L); // TODO
 
         // select channel
-        selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_MOBILE);
+        query.hits(DemoConst.TAG_MOBILE).sort(null);
+        selected = demo.dimiter().dimit().group(group.id()).select(query);
         LOG.info("select only mobile {}", selected); // 21003
 
         // valid 21001
@@ -124,7 +127,9 @@ public class TestDimiterDemo {
     @Ignore
     public void testUpdateTps() throws IOException, InterruptedException {
         List<ChannelWrapper> selected = null;
-        selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+        SortableChannelQuery query = SortableChannelQuery.newQuery().hits(DemoConst.TAG_FIXED,
+          DemoConst.TAG_MOBILE);
+        selected = demo.dimiter().dimit().group(group.id()).select(query);
         LOG.info("select only mobile {}", selected); // 21001
         if (!selected.isEmpty()) {
             LOG.info("tps {}", selected.get(0).tps()); // 2.0
@@ -138,7 +143,7 @@ public class TestDimiterDemo {
         demo.dimiter().storeSystem().io().write(path21001, conf21001); // 1.0
         Thread.sleep(1000L);
 
-        selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+        selected = demo.dimiter().dimit().group(group.id()).select(query);
         LOG.info("select only mobile {}", selected); // 21001
         if (!selected.isEmpty()) {
             LOG.info("tps {} {}", selected.get(0).tps(), selected.get(0).isValid()); // 1.0
@@ -150,7 +155,7 @@ public class TestDimiterDemo {
         demo.dimiter().storeSystem().io().write(path21001, conf21001); // 0.5
         Thread.sleep(1000L);
 
-        selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+        selected = demo.dimiter().dimit().group(group.id()).select(query);
         LOG.info("select only mobile {}", selected); //
         if (!selected.isEmpty()) {
             LOG.info("tps {} {}", selected.get(0).tps(), selected.get(0).isValid());
@@ -171,7 +176,9 @@ public class TestDimiterDemo {
 
         // select channel
         List<ChannelWrapper> selected = null;
-        selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+        SortableChannelQuery query = SortableChannelQuery.newQuery().hits(DemoConst.TAG_FIXED,
+          DemoConst.TAG_MOBILE);
+        selected = demo.dimiter().dimit().group(group.id()).select(query);
 
         if (!selected.isEmpty()) {
             final ChannelWrapper ch = selected.get(0);
@@ -210,7 +217,7 @@ public class TestDimiterDemo {
                     demo.dimiter().storeSystem().io().write(path21001, conf21001); // 1.0
                     Thread.sleep(1000L);
 
-                    selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE);
+                    selected = demo.dimiter().dimit().group(group.id()).select(query);
                     LOG.info("select only mobile {}", selected); // 21001
                     if (!selected.isEmpty()) {
                         LOG.info("tps {} {}", selected.get(0).tps(), selected.get(0).isValid()); // 1.0
@@ -239,7 +246,8 @@ public class TestDimiterDemo {
         ExecutorService es = Executors.newFixedThreadPool(2);
 
         // select channel
-        final List<ChannelWrapper> selected = demo.dimiter().dimit().group(group.id()).select(DemoConst.TAG_MOBILE);
+        SortableChannelQuery query = SortableChannelQuery.newQuery().hits(DemoConst.TAG_MOBILE);
+        final List<ChannelWrapper> selected = demo.dimiter().dimit().group(group.id()).select(query);
         if (!selected.isEmpty()) {
             final AtomicInteger execCount = new AtomicInteger(0);
             int forCount = 1000;

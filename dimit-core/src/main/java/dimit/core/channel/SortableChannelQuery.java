@@ -41,10 +41,12 @@ public class SortableChannelQuery extends ChannelSelectQuery {
 
   private String join(String... args) {
     StringBuilder sb = new StringBuilder();
-    for (String arg : args) {
-      sb.append(arg);
-      sb.append(",");
+    if (args != null) {
+      for (String arg : args) {
+        sb.append(arg);
+        sb.append(",");
+      }
     }
-    return sb.substring(0, sb.length() - 1);
+    return sb.toString();
   }
 }
