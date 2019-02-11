@@ -6,8 +6,6 @@ package dimit.core.channel;
 import java.io.Closeable;
 import java.util.List;
 
-import dimit.store.ChannelType;
-
 /**
  * <pre>
  * e.g. how to use {@link ChannelSelector}
@@ -45,11 +43,7 @@ public abstract class ChannelSelector implements Closeable {
         this.group = group;
     }
 
-    public List<ChannelWrapper> select(String... tags) {
-        return select(ChannelType.SEND, tags);
-    }
-
-    abstract List<ChannelWrapper> select(ChannelType type, String... tags);
+    public abstract List<ChannelWrapper> select(ChannelSelectQuery query);
 
     public ChannelGroupWrapper group() {
         return this.group;

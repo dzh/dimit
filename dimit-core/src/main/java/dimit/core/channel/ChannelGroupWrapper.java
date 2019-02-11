@@ -3,16 +3,6 @@
  */
 package dimit.core.channel;
 
-import java.io.IOException;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import dimit.core.Dimiter;
 import dimit.core.StoreConst;
 import dimit.store.ChannelGroup;
@@ -23,6 +13,15 @@ import dimit.store.sys.Const;
 import dimit.store.sys.DimitPath;
 import dimit.store.sys.DimitStoreSystem;
 import dimit.store.util.IDUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author dzh
@@ -75,9 +74,10 @@ public class ChannelGroupWrapper implements StoreWrapper<ChannelGroup, ChannelGr
         return group;
     }
 
-    public List<ChannelWrapper> select(String... tags) {
-        return selector.select(tags);
+    public List<ChannelWrapper> select(ChannelSelectQuery query) {
+        return selector.select(query);
     }
+
 
     /**
      * @param cid

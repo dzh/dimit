@@ -1,18 +1,17 @@
 package dimit.demo.store;
 
-import java.io.IOException;
-import java.util.Arrays;
-
+import dimit.demo.DemoConst;
+import dimit.store.conf.ChannelStatus;
+import dimit.store.conf.DimitConf;
+import dimit.store.sys.DimitPath;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dimit.demo.DemoConst;
-import dimit.store.conf.ChannelStatus;
-import dimit.store.conf.DimitConf;
-import dimit.store.sys.DimitPath;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * 初始化测试数据
@@ -52,7 +51,7 @@ public class TestZkStoreConfDemo {
     @Test
     public void createChannelConf_1() throws IOException {
         DimitPath path = zkStore.createChannelConf("voice", "vcode", "21001", "ch1", ChannelStatus.PRIMARY, 10, 100f,
-                Arrays.asList(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE));
+                Arrays.asList(DemoConst.TAG_FIXED, DemoConst.TAG_MOBILE,DemoConst.TAG_ONLY_CMCC));
 
         DimitConf dimitConf = path.<DimitConf> toStore(DimitConf.class);
         LOG.info("read dimit {} {}", path, dimitConf);
@@ -61,7 +60,7 @@ public class TestZkStoreConfDemo {
     @Test
     public void createChannelConf_2() throws IOException {
         DimitPath path = zkStore.createChannelConf("voice", "vcode", "21002", "ch2", ChannelStatus.PRIMARY, 8, 100f,
-                Arrays.asList(DemoConst.TAG_FIXED));
+                Arrays.asList(DemoConst.TAG_FIXED,DemoConst.TAG_ONLY_CMCC));
 
         DimitConf dimitConf = path.<DimitConf> toStore(DimitConf.class);
         LOG.info("read dimit {} {}", path, dimitConf);
@@ -70,7 +69,7 @@ public class TestZkStoreConfDemo {
     @Test
     public void createChannelConf_3() throws IOException {
         DimitPath path = zkStore.createChannelConf("voice", "vcode", "21003", "ch3", ChannelStatus.STANDBY, 8, 100f,
-                Arrays.asList(DemoConst.TAG_MOBILE));
+                Arrays.asList(DemoConst.TAG_MOBILE,DemoConst.TAG_FIXED_CALLER,DemoConst.TAG_ONLY_CMCC));
 
         DimitConf dimitConf = path.<DimitConf> toStore(DimitConf.class);
         LOG.info("read dimit {} {}", path, dimitConf);

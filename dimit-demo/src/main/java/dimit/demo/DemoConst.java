@@ -10,4 +10,7 @@ public interface DemoConst {
     String TAG_FIXED = "fixed";
     String TAG_MOBILE = "mobile";
 
+    String TAG_FIXED_CALLER = "fixed_caller";
+    String TAG_ONLY_CMCC ="only_cmcc";
+
 }
